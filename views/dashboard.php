@@ -2,7 +2,12 @@
 include 'models/model_role.php';
 $modelRole = new ModelRole();
 $roles = $modelRole->getRoles();
-$roleCount = count($roles); // Hitung jumlah role
+$roleCount = count($roles);
+
+include 'models/model_user.php';
+$modelUser = new UserModel();
+$users = $modelUser->getUsers();
+$userCount = count($users);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,6 +41,21 @@ $roleCount = count($roles); // Hitung jumlah role
                         <div>
                             <h2 class="text-lg font-medium text-white">Jumlah Role</h2>
                             <p class="text-sm text-white"><?php echo $roleCount; ?> Role Tersedia</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="index.php?modul=user" class="block p-4 bg-pink-500 shadow-md rounded-lg hover:bg-pink-600 transition">
+                    <div class="flex items-center space-x-4">
+                        <!-- Icon -->
+                        <div class="p-2 bg-pink-100 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 12a6 6 0 10-12 0 6 6 0 0012 0zM5 6a3 3 0 116 0 3 3 0 01-6 0zM5 10a6 6 0 100 12 6 6 0 000-12z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <!-- Info -->
+                        <div>
+                            <h2 class="text-lg font-medium text-white">Jumlah User</h2>
+                            <p class="text-sm text-white"><?php echo $userCount; ?> User Tersedia</p>
                         </div>
                     </div>
                 </a>

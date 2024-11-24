@@ -76,4 +76,8 @@ class UserModel {
 
         return $stmt->execute();
     }
+
+    public function getAllUsers() {
+        return $this->getUsers();
+    }
 }
