@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Pengguna</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Add User</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 </head>
-<body class="bg-gray-100 flex flex-col">
-    <!-- Navbar -->
-    <?php include 'includes/navbar.php'; ?>
-
-    <div class="flex flex-grow">
+<body class="bg-gray-100">
+    <div class="flex h-screen">
         <!-- Sidebar -->
         <?php include 'includes/sidebar.php'; ?>
 
-        <!-- Konten Utama -->
-        <div class="p-6 flex-1">
-            <h1 class="text-2xl font-bold text-gray-800 mb-6">Tambah Pengguna Baru</h1>
+        <!-- Main Content -->
+        <div class="flex-1 p-6 ml-64">
+            <!-- Konten utama, termasuk form -->
+            <h1 class="text-2xl text-gray-800 font-semibold mb-6">Create User</h1>
 
             <!-- Form Tambah Pengguna -->
-            <form action="index.php?modul=user&fitur=create" method="POST" class="bg-white shadow rounded-lg p-6">
+            <form action="index.php?modul=user&fitur=create" method="POST" class="bg-white shadow rounded-lg p-6 max-w-lg mx-auto">
                 <div class="mb-4">
                     <label for="user_name" class="block text-gray-700 font-bold mb-2">Nama Pengguna</label>
                     <input type="text" id="user_name" name="user_name" required class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -55,10 +54,13 @@
                     </select>
                 </div>
 
-                <div class="flex justify-end">
+                <div class="flex justify-end space-x-4">
                     <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">
                         Simpan
                     </button>
+                    <a href="index.php?modul=user&fitur=list" class="bg-gray-300 text-black px-6 py-2 rounded-lg hover:bg-gray-400">
+                        Back to User List
+                    </a>
                 </div>
             </form>
         </div>

@@ -20,6 +20,12 @@ switch ($modul) {
         $controllerUser->handleRequestUser($fitur);
         break;
 
+    case 'inventory':
+        require_once './controllers/controller_barang.php';
+        $controllerBarang = new controllerBarang($conn);
+        $controllerBarang->handleRequestBarang($fitur);
+        break;
+
     default:
         echo "<h1>404 - Modul Tidak Ditemukan</h1>";
         include 'views/dashboard.php';
