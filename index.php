@@ -26,6 +26,12 @@ switch ($modul) {
         $controllerBarang->handleRequestBarang($fitur);
         break;
 
+    case 'transactions':
+        require_once './controllers/controller_transaksi.php';
+        $controllerTransaction = new ControllerTransaksi($conn);
+        $controllerTransaction->handleRequestTransaksi($fitur);
+        break;
+
     default:
         echo "<h1>404 - Modul Tidak Ditemukan</h1>";
         include 'views/dashboard.php';
