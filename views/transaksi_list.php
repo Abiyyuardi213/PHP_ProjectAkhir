@@ -22,7 +22,7 @@
             <h1 class="text-3xl font-semibold text-gray-900 mb-8">Manage Transactions</h1>
 
             <div class="flex justify-end mb-4">
-                <a href="index.php?modul=transaksi&fitur=add" 
+                <a href="index.php?modul=transactions&fitur=create" 
                 class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 shadow-lg transition duration-300">
                     <span class="material-icons-outlined mr-2">add</span>
                     Add Transaction
@@ -55,7 +55,13 @@
                                         Rp <?= number_format($transaction['total_amount'] ?? 0, 0, ',', '.') ?>
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
-                                        <?= htmlspecialchars($transaction['transaksi_status'] ?? 'N/A') ?>
+                                        <?php
+                                            // Ubah nilai transaksi_status menjadi teks
+                                            $statusText = $transaction['transaksi_status'] == 1 ? 'Success' : 'Pending';
+                                        ?>
+                                        <span class="px-2 py-1 rounded-full text-sm <?= $transaction['transaksi_status'] == 1 ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800' ?>">
+                                            <?= htmlspecialchars($statusText) ?>
+                                        </span>
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
                                         <?= htmlspecialchars($transaction['transaksi_date'] ?? 'N/A') ?>
@@ -65,18 +71,13 @@
                                         class="inline-flex items-center px-2 py-1 text-sm text-blue-500 bg-blue-100 rounded hover:bg-blue-200 transition">
                                             <span class="material-icons-outlined mr-1">visibility</span>
                                         </a>
-                                        <a href="index.php?modul=transaksi&fitur=delete&id=<?= htmlspecialchars($transaction['transaksi_id']) ?>" 
-                                        class="inline-flex items-center px-2 py-1 text-sm text-red-500 bg-red-100 rounded hover:bg-red-200 transition ml-2"
-                                        onclick="return confirm('Are you sure you want to delete this transaction?')">
-                                            <span class="material-icons-outlined mr-1">delete</span>
-                                        </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else : ?>
                             <tr>
                                 <td colspan="6" class="py-4 px-4 text-center text-gray-500">
-                                    No transactions available.
+                                    No transa ctions available.
                                 </td>
                             </tr>
                         <?php endif; ?>

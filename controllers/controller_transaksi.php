@@ -2,28 +2,25 @@
 include './models/model_transaksi.php';
 include './models/model_user.php';
 include './models/model_barang.php';
-include './models/model_detailTransaksi.php';
 
 class ControllerTransaksi {
     private $transaksiModel;
     private $userModel;
     private $barangModel;
-    private $detailModel;
 
     public function __construct($conn) {
         $this->transaksiModel = new TransactionModel($conn);
         $this->userModel = new UserModel();
         $this->barangModel = new ModelBarang($conn);
-        $this->detailModel = new DetailTransaksiModel($conn);
     }
 
     public function handleRequestTransaksi($fitur) {
         switch ($fitur) {
             case 'list':
-                include 'views/transaksi_list.php';
+                $this->listTransaksi();
                 break;
             
-            case 'add':
+            case 'create':
                 $this->createTransaksi();
                 break;
             
@@ -44,7 +41,17 @@ class ControllerTransaksi {
 
     public function listTransaksi() {
         $transactions = $this->transaksiModel->getTransactions();
-        var_dump($transactions);
+
+        $transactionsList = array_map(function($transaction) {
+            return [
+                'transaksi_id' => $transaction['transaksi_id'],
+                'user_name' => $transaction['user_name'],
+                'total_amount' => $transaction['total_amount'],
+                'transaksi_status' => $transaction['transaksi_status'] == 1 ? 'Success' : 'Pending',
+                'transaksi_date' => $transaction['transaksi_date'],
+            ];
+        }, $transactions);
+
         include './views/transaksi_list.php';
     }
 
@@ -55,80 +62,64 @@ class ControllerTransaksi {
             echo "Data transaksi tidak ditemukan.";
             return;
         }
-    
-        $details = $this->detailModel->getDetailByTransaksiId($transaksi_id);
-    
-        if (!$details) {
-            echo "Detail transaksi tidak ditemukan.";
-            return;
-        }
-    
-        $transaction['item_detail'] = $details;
         include './views/transaksi_detail.php';
     }
 
     public function createTransaksi() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : null;
-            $transaksi_status = isset($_POST['transaksi_status']) ? intval($_POST['transaksi_status']) : null;
-            $item_detail_json = isset($_POST['item_detail']) ? trim($_POST['item_detail']) : null;
-
-            if (!$user_id || !$transaksi_status || !$item_detail_json) {
-                echo "Semua data wajib diisi.";
+            $barang_ids = $_POST['barang_id'] ?? [];
+            $barang_quantities = $_POST['quantity'] ?? [];
+    
+            if (!$user_id) {
+                echo "User belum dipilih.";
                 include './views/transaksi_add.php';
                 return;
             }
     
-            $item_detail = json_decode($item_detail_json, true);
-            
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                echo "Format item_detail tidak valid.";
+            if (empty($barang_ids) || count($barang_ids) === 0) {
+                echo "Tidak ada barang yang dipilih.";
                 include './views/transaksi_add.php';
                 return;
             }
     
-            if (!is_array($item_detail)) {
-                echo "Item detail harus berupa array yang valid.";
-                include './views/transaksi_add.php';
-                return;
-            }
-    
-            foreach ($item_detail as $detail) {
-                if (!isset($detail['id_barang']) || !is_numeric($detail['id_barang'])) {
-                    echo "ID Barang tidak valid.";
-                    include './views/transaksi_add.php';
-                    return;
-                }
-                if (!isset($detail['quantity']) || !is_numeric($detail['quantity']) || $detail['quantity'] <= 0) {
-                    echo "Jumlah barang harus valid dan lebih dari 0.";
-                    include './views/transaksi_add.php';
-                    return;
-                }
-                if (!isset($detail['price_barang']) || !is_numeric($detail['price_barang']) || $detail['price_barang'] <= 0) {
-                    echo "Harga barang harus valid dan lebih dari 0.";
+            foreach ($barang_ids as $index => $barang_id) {
+                if (!isset($barang_quantities[$index]) || intval($barang_quantities[$index]) <= 0) {
+                    echo "Kuantitas barang tidak valid untuk barang ID: $barang_id.";
                     include './views/transaksi_add.php';
                     return;
                 }
             }
     
-            $transaksi_id = $this->transaksiModel->addTransaksi($user_id, $transaksi_status, $item_detail);
-            
-            if ($transaksi_id) {
-                foreach ($item_detail as $detail) {
-                    $this->detailModel->addDetailTransaksi($transaksi_id, $detail['id_barang'], $detail['quantity'], $detail['price_barang']);
+            $items = [];
+            foreach ($barang_ids as $index => $barang_id) {
+                $quantity = intval($barang_quantities[$index]);
+                $barang = $this->barangModel->getBarangById($barang_id);
+    
+                if (!$barang) {
+                    echo "Barang dengan ID $barang_id tidak ditemukan.";
+                    include './views/transaksi_add.php';
+                    return;
                 }
-                header('Location: index.php?modul=transaksi&fitur=list');
+    
+                $items[] = [
+                    'id_barang' => intval($barang_id),
+                    'quantity' => $quantity,
+                ];
+            }
+    
+            try {
+                $this->transaksiModel->createTransaksi($user_id, $items, 1);
+                header('Location: index.php?modul=transactions&fitur=list');
                 exit();
-            } else {
-                echo "Gagal menambah transaksi.";
+            } catch (Exception $e) {
+                echo "Terjadi kesalahan: " . $e->getMessage();
                 include './views/transaksi_add.php';
             }
         } else {
+            $users = $this->userModel->getAllUsers();
+            $barangs = $this->barangModel->getAllBarangs();
             include './views/transaksi_add.php';
         }
-    }
-
-    public function getTransactionDetails($transaksi_id) {
-        return $this->transaksiModel->getTransactionById($transaksi_id);
     }
 }

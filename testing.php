@@ -1,23 +1,32 @@
 <?php
-include './models/model_detailTransaksi.php';
+include './models/model_transaksi.php';
 include './config/db_connect.php';
 
-$model = new DetailTransaksiModel($conn);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-$transaksi_id = 1;
-$id_barang = 2;
-$quantity = 3;
-$price_barang = 13450000.00;
+$model = new TransactionModel($conn);
 
-$newDetailId = $model->addDetailTransaksi($transaksi_id, $id_barang, $quantity, $price_barang);
-if ($newDetailId == 0) {
-    echo "Failed to add detail transaksi!";
-} else {
-    echo "Detail transaksi berhasil ditambahkan dengan ID: " . $newDetailId;
+// Data untuk pengujian
+$user_id = 1;
+$transaksi_status = 1; // Contoh: 1 untuk transaksi selesai
+$items = [
+    ['id_barang' => 3, 'quantity' => 1],
+    ['id_barang' => 5, 'quantity' => 2]
+];
+
+try {
+    // Tambahkan transaksi baru
+    $newTransactionId = $model->createTransaksi($user_id, $items, $transaksi_status);
+    echo "Transaksi berhasil ditambahkan dengan ID: " . $newTransactionId . "<br>";
+
+    // Ambil detail transaksi
+    $details = $model->getTransactionById($newTransactionId);
+    echo "<pre>";
+    print_r($details);
+    echo "</pre>";
+} catch (Exception $e) {
+    echo "Gagal menambahkan transaksi: " . $e->getMessage(); // Detail untuk debugging
 }
-
-$details = $model->getDetailByTransaksiId($transaksi_id);
-echo "<pre>";
-print_r($details);
-echo "</pre>";
 ?>
