@@ -35,7 +35,7 @@
 
             <!-- Transaction Info -->
             <div class="bg-white shadow-md rounded-lg p-6 mb-6">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Transaction Information</h2>
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Transaction Information</h2>
                 <p><strong>Transaction ID:</strong> <?= htmlspecialchars($transaction['transaksi_id']) ?></p>
                 <p><strong>Date:</strong> <?= htmlspecialchars($transaction['transaksi_date']) ?></p>
                 <p><strong>Status:</strong> 

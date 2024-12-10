@@ -46,6 +46,7 @@ class TransactionModel {
 
         $details = [];
         while ($row = $result->fetch_assoc()) {
+            // var_dump($row);
             $details[] = $row;
         }
         return $details;

@@ -1,32 +1,41 @@
 <?php
-include './models/model_transaksi.php';
+include './models/model_customer.php';
 include './config/db_connect.php';
 
+// Menampilkan semua error (untuk debugging)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$model = new TransactionModel($conn);
-
-// Data untuk pengujian
-$user_id = 1;
-$transaksi_status = 1; // Contoh: 1 untuk transaksi selesai
-$items = [
-    ['id_barang' => 3, 'quantity' => 1],
-    ['id_barang' => 5, 'quantity' => 2]
-];
+// Inisialisasi model
+$model = new CustomerService($conn);
 
 try {
-    // Tambahkan transaksi baru
-    $newTransactionId = $model->createTransaksi($user_id, $items, $transaksi_status);
-    echo "Transaksi berhasil ditambahkan dengan ID: " . $newTransactionId . "<br>";
+    // 1. Tambahkan customer baru
+    $newCustomerId = $model->createCustomer(
+        'john_doe', 
+        'password123', 
+        'johndoe@example.com', 
+        'John Doe', 
+        '081234567890', 
+        '123 Main Street', 
+    );
+    echo "Customer berhasil ditambahkan dengan ID: " . htmlspecialchars($newCustomerId) . "<br>";
 
-    // Ambil detail transaksi
-    $details = $model->getTransactionById($newTransactionId);
-    echo "<pre>";
-    print_r($details);
+    // 2. Ambil semua data customer
+    $allCustomers = $model->getAllCustomers();
+    echo "<h3>Daftar Customer:</h3><pre>";
+    print_r($allCustomers);
     echo "</pre>";
+
+    // 3. Ambil detail customer berdasarkan ID
+    $customerDetails = $model->getCustomerById($newCustomerId);
+    echo "<h3>Detail Customer:</h3><pre>";
+    print_r($customerDetails);
+    echo "</pre>";
+
 } catch (Exception $e) {
-    echo "Gagal menambahkan transaksi: " . $e->getMessage(); // Detail untuk debugging
+    // Tampilkan pesan error untuk debugging
+    echo "Terjadi kesalahan: " . htmlspecialchars($e->getMessage());
 }
 ?>

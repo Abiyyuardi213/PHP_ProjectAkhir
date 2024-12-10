@@ -149,6 +149,12 @@
             totalPriceInput.value = total;
         }
 
+        function updateQuantity(index, newQuantity) {
+            if (newQuantity < 1) newQuantity = 1; // Pastikan quantity tidak kurang dari 1
+            selectedItems[index].quantity = parseInt(newQuantity);
+            renderTable();
+        }
+
         function removeItem(index) {
             selectedItems.splice(index, 1);
             renderTable();

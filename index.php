@@ -32,6 +32,12 @@ switch ($modul) {
         $controllerTransaction->handleRequestTransaksi($fitur);
         break;
 
+    case 'customer':
+        require_once './controllers/controller_customer.php';
+        $controllerCustomer = new ControllerCustomer($conn);
+        $controllerCustomer->handleRequestCustomer($fitur);
+        break;
+
     default:
         echo "<h1>404 - Modul Tidak Ditemukan</h1>";
         include 'views/dashboard.php';
