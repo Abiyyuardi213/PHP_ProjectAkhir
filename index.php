@@ -38,6 +38,12 @@ switch ($modul) {
         $controllerCustomer->handleRequestCustomer($fitur);
         break;
 
+    case 'supplier':
+        require_once './controllers/controller_supplier.php';
+        $controllerSupplier = new ControllerSupplier($conn);
+        $controllerSupplier->handleRequestSupplier($fitur);
+        break;
+
     default:
         echo "<h1>404 - Modul Tidak Ditemukan</h1>";
         include 'views/dashboard.php';

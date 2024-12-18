@@ -3,8 +3,10 @@
     <div class="flex flex-col items-center py-6">
         <h5 class="text-xl font-semibold mb-4 text-center">Warehouse Management System</h5>
         <img src="https://via.placeholder.com/80" alt="User" class="rounded-full mb-3">
-        <p class="mb-6">Username</p>
-        <p class="mb-6">Role : Admin</p>
+        <div class="flex items-center mb-6 space-x-2">
+            <p class="font-semibold">Username</p>
+            <span class="text-sm text-gray-300">| Role: Admin</span>
+        </div>
         <ul class="w-full">
             <li class="mb-2">
                 <a href="index.php?modul=dashboard" class="flex items-center py-2 px-4 hover:bg-gray-700">
@@ -40,6 +42,12 @@
                 <a href="index.php?modul=customer&fitur=list" class="flex items-center py-2 px-4 hover:bg-gray-700">
                     <span class="material-icons-outlined">supervisor_account</span>
                     <span class="ml-2">Manage Customers</span>
+                </a>
+            </li>
+            <li class="mb-2">
+                <a href="index.php?modul=supplier&fitur=list" class="flex items-center py-2 px-4 hover:bg-gray-700">
+                    <span class="material-icons-outlined">business</span>
+                    <span class="ml-2">Manage Supplier</span>
                 </a>
             </li>
             <li class="mb-2">
