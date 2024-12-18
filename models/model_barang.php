@@ -1,7 +1,17 @@
 <?php
 include './config/db_connect.php';
 
-class ModelBarang {
+interface InterfaceBarang {
+    public function getBarangs();
+    public function getBarangById($barang_id);
+    public function addBarang($barang_name, $barang_quantity, $barang_price, $barang_supplier, $barang_status);
+    public function updateBarang($barang_id, $barang_name, $barang_quantity, $barang_price, $barang_supplier, $barang_status);
+    public function deleteBarang($barang_id);
+    public function searchBarangByName($keyword);
+    public function getAllBarangs();
+}
+
+class ModelBarang implements InterfaceBarang {
     private $conn;
 
     public function __construct($conn) {
@@ -57,19 +67,18 @@ class ModelBarang {
         return $stmt->execute();
     }
 
-    public function searchBarangByName($keyword) {
+    public function searchBarangByName($searchTerm) {
+        global $conn;
         $sql = "SELECT * FROM tb_inventory WHERE barang_name LIKE ?";
-        $stmt = $this->conn->prepare($sql);
-        $searchKeyword = "%" . $keyword . "%";
-        $stmt->bind_param("s", $searchKeyword);
+        $stmt = $conn->prepare($sql);
+        $likeTerm = "%$searchTerm%";
+        $stmt->bind_param("s", $likeTerm);
         $stmt->execute();
         $result = $stmt->get_result();
 
         $barangs = [];
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $barangs[] = $row;
-            }
+        while ($row = $result->fetch_assoc()) {
+            $barangs[] = $row;
         }
         return $barangs;
     }

@@ -21,64 +21,105 @@ $roles = $this->roleModel->getAllRoles();
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
-    <div class="flex h-screen">
-        <?php include 'includes/sidebar.php'; ?>
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-3xl bg-white shadow-lg rounded-xl overflow-hidden p-8">
+        <h1 class="text-3xl font-bold text-blue-700 text-center mb-6">Update User</h1>
 
-        <!-- Main Content -->
-        <div class="flex-1 p-6 ml-64">
-            <h1 class="text-2xl font-semibold text-gray-800 mb-6">Update User</h1>
+        <!-- Display Error Message -->
+        <?php if (isset($error)) : ?>
+            <div class="flex items-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
+                <span class="material-icons-outlined mr-2">error</span>
+                <span><?= htmlspecialchars($error) ?></span>
+            </div>
+        <?php endif; ?>
 
-            <?php
-            if (isset($error)) : ?>
-                <div class="bg-red-500 text-white p-4 mb-4 rounded-md">
-                    <?= htmlspecialchars($error) ?>
+        <form action="index.php?modul=user&fitur=update&id=<?= $user_id ?>" method="POST" class="space-y-6">
+            <!-- Nama Pengguna -->
+            <div>
+                <label for="user_name" class="block text-lg font-medium text-gray-700">Nama Pengguna</label>
+                <div class="relative">
+                    <span class="material-icons-outlined absolute left-3 top-2.5 text-gray-400">person</span>
+                    <input type="text" id="user_name" name="user_name" value="<?= htmlspecialchars($user['user_name']) ?>"
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                           placeholder="Enter full name" required>
                 </div>
-            <?php endif; ?>
+            </div>
 
-            <form action="index.php?modul=user&fitur=update&id=<?= $user_id ?>" method="POST" class="bg-white shadow rounded-lg p-6 max-w-lg mx-auto">
-                <div class="mb-4">
-                    <label for="user_name" class="block text-gray-700">Nama Pengguna</label>
-                    <input type="text" id="user_name" name="user_name" value="<?= htmlspecialchars($user['user_name']) ?>" required class="w-full p-3 border border-gray-300 rounded-md">
+            <!-- Username -->
+            <div>
+                <label for="username" class="block text-lg font-medium text-gray-700">Username</label>
+                <div class="relative">
+                    <span class="material-icons-outlined absolute left-3 top-2.5 text-gray-400">account_circle</span>
+                    <input type="text" id="username" name="username" value="<?= htmlspecialchars($user['username']) ?>"
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                           placeholder="Enter username" required>
                 </div>
+            </div>
 
-                <div class="mb-4">
-                    <label for="username" class="block text-gray-700">Username</label>
-                    <input type="text" id="username" name="username" value="<?= htmlspecialchars($user['username']) ?>" required class="w-full p-3 border border-gray-300 rounded-md">
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-lg font-medium text-gray-700">Password (kosongkan jika tidak ingin mengubah)</label>
+                <div class="relative">
+                    <span class="material-icons-outlined absolute left-3 top-2.5 text-gray-400">lock</span>
+                    <input type="password" id="password" name="password"
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                           placeholder="Enter new password">
                 </div>
+            </div>
 
-                <div class="mb-4">
-                    <label for="password" class="block text-gray-700">Password (kosongkan jika tidak ingin mengubah)</label>
-                    <input type="password" id="password" name="password" class="w-full p-3 border border-gray-300 rounded-md">
+            <!-- Email -->
+            <div>
+                <label for="user_email" class="block text-lg font-medium text-gray-700">Email</label>
+                <div class="relative">
+                    <span class="material-icons-outlined absolute left-3 top-2.5 text-gray-400">email</span>
+                    <input type="email" id="user_email" name="user_email" value="<?= htmlspecialchars($user['user_email']) ?>"
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                           placeholder="Enter email address" required>
                 </div>
+            </div>
 
-                <div class="mb-4">
-                    <label for="user_email" class="block text-gray-700">Email</label>
-                    <input type="email" id="user_email" name="user_email" value="<?= htmlspecialchars($user['user_email']) ?>" required class="w-full p-3 border border-gray-300 rounded-md">
+            <!-- Telepon -->
+            <div>
+                <label for="user_phone" class="block text-lg font-medium text-gray-700">Telepon</label>
+                <div class="relative">
+                    <span class="material-icons-outlined absolute left-3 top-2.5 text-gray-400">phone</span>
+                    <input type="text" id="user_phone" name="user_phone" value="<?= htmlspecialchars($user['user_phone']) ?>"
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                           placeholder="Enter phone number" required>
                 </div>
+            </div>
 
-                <div class="mb-4">
-                    <label for="user_phone" class="block text-gray-700">Telepon</label>
-                    <input type="text" id="user_phone" name="user_phone" value="<?= htmlspecialchars($user['user_phone']) ?>" required class="w-full p-3 border border-gray-300 rounded-md">
-                </div>
-
-                <div class="mb-4">
-                    <label for="role_id" class="block text-gray-700">Role</label>
-                    <select id="role_id" name="role_id" required class="w-full p-3 border border-gray-300 rounded-md">
+            <!-- Role -->
+            <div>
+                <label for="role_id" class="block text-lg font-medium text-gray-700">Role</label>
+                <div class="relative">
+                    <span class="material-icons-outlined absolute left-3 top-2.5 text-gray-400">supervisor_account</span>
+                    <select id="role_id" name="role_id"
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            required>
                         <?php foreach ($roles as $role) : ?>
-                            <option value="<?= $role['role_id'] ?>" <?= $role['role_id'] == $user['role_id'] ? 'selected' : '' ?>><?= htmlspecialchars($role['role_name']) ?></option>
+                            <option value="<?= $role['role_id'] ?>" <?= $role['role_id'] == $user['role_id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($role['role_name']) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
+            </div>
 
-                <div class="flex justify-between">
-                    <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600">Perbarui Pengguna</button>
-                    <a href="index.php?modul=user&fitur=list" class="bg-gray-300 text-black px-6 py-2 rounded-md hover:bg-gray-400">
-                        Back to User List
-                    </a>
-                </div>
-            </form>
-        </div>
+            <!-- Action Buttons -->
+            <div class="flex justify-between items-center">
+                <a href="index.php?modul=user&fitur=list"
+                   class="flex items-center px-6 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition">
+                    <span class="material-icons-outlined mr-2">arrow_back</span>
+                    Cancel
+                </a>
+                <button type="submit"
+                        class="flex items-center px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
+                    <span class="material-icons-outlined mr-2">save</span>
+                    Update User
+                </button>
+            </div>
+        </form>
     </div>
 </body>
 </html>

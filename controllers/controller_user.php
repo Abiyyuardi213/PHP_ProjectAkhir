@@ -13,6 +13,9 @@ class controllerUser {
 
     public function handleRequestUser($fitur) {
         $user_id = $_GET['id'] ?? null;
+        $searchTerm = $_GET['search'] ?? null;
+        $order = $_GET['order'] ?? 'ASC';
+
         switch ($fitur) {
             case 'create':
                 $this->createUsers();
@@ -31,6 +34,12 @@ class controllerUser {
                     header('Location: index.php?modul=user&fitur=list');
                 }
                 break;
+            case 'sortByName':
+                $this->sortUsers('name', $order);
+                break;
+            case 'sortById':
+                $this->sortUsers('id', $order);
+                break;
             default:
                 $this->listUsers();
                 break;
@@ -38,13 +47,13 @@ class controllerUser {
     }
 
     public function listUsers() {
-        $users = $this->userModel->getUsers();
+        $searchTerm = $_GET['search'] ?? null;
+        if ($searchTerm) {
+            $users = $this->userModel->searchUserByName($searchTerm);
+        } else {
+            $users = $this->userModel->getUsers();
+        }
         include './views/user_list.php';
-    }
-
-    public function viewDetails($user_id) {
-        $user = $this->userModel->getUserById($user_id);
-        //include view user detail
     }
 
     public function createUsers() {
@@ -89,5 +98,16 @@ class controllerUser {
         $this->userModel->deleteUser($user_id);
         header('Location: index.php?modul=user');
         exit;
+    }
+
+    public function sortUsers($criteria, $order) {
+        if ($criteria === 'name') {
+            $users = $this->userModel->sortUserByName($order);
+        } elseif ($criteria === 'id') {
+            $users = $this->userModel->sortUserById($order);
+        } else {
+            $users = $this->userModel->getUsers();
+        }
+        include './views/user_list.php';
     }
 }

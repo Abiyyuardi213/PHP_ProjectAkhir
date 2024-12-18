@@ -1,9 +1,10 @@
 <!-- Sidebar -->
-<nav class="w-64 bg-[#343a40] text-white h-full fixed">
+<nav class="w-64 bg-[#343a40] text-white h-screen fixed overflow-y-auto">
     <div class="flex flex-col items-center py-6">
         <h5 class="text-xl font-semibold mb-4 text-center">Warehouse Management System</h5>
         <img src="https://via.placeholder.com/80" alt="User" class="rounded-full mb-3">
-        <p class="mb-6">Admin</p>
+        <p class="mb-6">Username</p>
+        <p class="mb-6">Role : Admin</p>
         <ul class="w-full">
             <li class="mb-2">
                 <a href="index.php?modul=dashboard" class="flex items-center py-2 px-4 hover:bg-gray-700">
@@ -13,7 +14,7 @@
             </li>
             <li class="mb-2">
                 <a href="index.php?modul=role&fitur=list" class="flex items-center py-2 px-4 hover:bg-gray-700">
-                    <span class="material-icons-outlined">security</span>
+                    <span class="material-icons-outlined">badge</span>
                     <span class="ml-2">Manage Role</span>
                 </a>
             </li>

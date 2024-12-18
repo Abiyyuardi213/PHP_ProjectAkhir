@@ -14,11 +14,8 @@
 
     <!-- Main Content -->
     <div class="ml-64 flex flex-col flex-grow">
-        <!-- Navbar -->
-        <?php include 'includes/navbar.php'; ?>
-
         <!-- Content -->
-        <div class="p-6 flex-1 mt-16"> <!-- Menambahkan mt-16 untuk memberi ruang atas -->
+        <div class="mt-4 p-6 flex-1 mt-16"> <!-- Menambahkan mt-16 untuk memberi ruang atas -->
             <h1 class="text-3xl font-semibold text-gray-900 mb-8">Manage Inventory</h1>
 
             <!-- Tombol Add Inventory -->

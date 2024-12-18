@@ -10,6 +10,9 @@ class controllerRole {
 
     public function handleRequestRole($fitur) {
         $role_id = $_GET['id'] ?? null;
+        $searchTerm = $_GET['search'] ?? null;
+        $order = $_GET['order'] ?? 'ASC';
+
         switch ($fitur) {
             case 'create':
                 $this->createRole();
@@ -28,6 +31,12 @@ class controllerRole {
                     header('Location: index.php?modul=role&fitur=list');
                 }
                 break;
+            case 'sortByName':
+                $this->sortRoles('name', $order);
+                break;
+            case 'sortById':
+                $this->sortRoles('id', $order);
+                break;
             default:
                 $this->listRoles();
                 break;
@@ -35,7 +44,12 @@ class controllerRole {
     }
 
     public function listRoles() {
-        $roles = $this->model->getRoles();
+        $searchTerm = $_GET['search'] ?? null;
+        if ($searchTerm) {
+            $roles = $this->model->searchRoleByName($searchTerm);
+        } else {
+            $roles = $this->model->getRoles();
+        }
         include './views/role_list.php';
     }
 
@@ -45,9 +59,15 @@ class controllerRole {
             $role_description = $_POST['role_description'] ?? '';
             $role_salary = $_POST['role_salary'] ?? 0;
             $role_status = $_POST['role_status'] ?? 0;
-
-            $this->model->addRole($role_name, $role_description, (int)$role_salary, (int)$role_status);
-            header('Location: index.php?modul=role&fitur=list');
+    
+            $isAdded = $this->model->addRole($role_name, $role_description, (int)$role_salary, (int)$role_status);
+            
+            if ($isAdded) {
+                header('Location: index.php?modul=role&fitur=list&message=Role successfully added');
+            } else {
+                header('Location: index.php?modul=role&fitur=create&error=Failed to add role');
+            }
+            exit;
         } else {
             include './views/role_add.php';
         }
@@ -73,7 +93,25 @@ class controllerRole {
     }
 
     public function deleteRole($role_id) {
-        $this->model->deleteRole($role_id);
-        header('Location: index.php?modul=role&fitur=list');
+        $result = $this->model->deleteRole($role_id);
+        
+        if ($result['success']) {
+            header('Location: index.php?modul=role&fitur=list&message=delete_success');
+        } else {
+            $error = $result['error'];
+            header("Location: index.php?modul=role&fitur=list&error=$error");
+        }
+        exit;
+    }
+
+    public function sortRoles($criteria, $order) {
+        if ($criteria === 'name') {
+            $roles = $this->model->sortRolesByName($order);
+        } elseif ($criteria === 'id') {
+            $roles = $this->model->sortRolesById($order);
+        } else {
+            $roles = $this->model->getRoles();
+        }
+        include './views/role_list.php';
     }
 }

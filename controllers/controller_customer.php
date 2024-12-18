@@ -52,7 +52,6 @@ class ControllerCustomer {
             $username = $_POST['username'] ?? '';
             $password = $_POST['password'] ?? '';
             $email = $_POST['email'] ?? '';
-            $email = $_POST['email'] ?? '';
             $full_name = $_POST['full_name'] ?? '';
             $phone_number = $_POST['phone_number'] ?? null;
             $address = $_POST['address'] ?? null;
@@ -79,9 +78,8 @@ class ControllerCustomer {
             $full_name = $_POST['full_name'] ?? '';
             $phone_number = $_POST['phone_number'] ?? null;
             $address = $_POST['address'] ?? null;
-            $status = intval($_POST['status'] ?? 0);
-
-            if ($this->model->updateCustomer($customer_id, $username, $email, $full_name, $phone_number, $address, $status)) {
+    
+            if ($this->model->updateCustomer($customer_id, $username, $email, $full_name, $phone_number, $address)) {
                 header('Location: index.php?modul=customer&fitur=list&message=update_success');
                 exit();
             } else {
@@ -93,7 +91,7 @@ class ControllerCustomer {
             echo "<div class='error'>Customer not found.</div>";
             $this->redirectToList();
         }
-        // include customer update
+        include './views/customer_update.php';
     }
 
     public function deleteCustomer($customer_id) {
@@ -107,7 +105,7 @@ class ControllerCustomer {
     public function searchCustomer() {
         $keyword = $_GET['keyword'] ?? '';
         $customers = $this->model->getAllCustomers();
-        include './views/customer_search.php';
+        // include customer search
     }
 
     private function redirectToList() {

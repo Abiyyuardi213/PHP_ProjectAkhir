@@ -36,11 +36,8 @@ $transactionCount = count($transactions);
 
         <!-- Main Content -->
         <div class="ml-64 flex flex-col flex-grow">
-            <!-- Navbar -->
-            <?php include 'includes/navbar.php'; ?>
-
             <!-- Content -->
-            <main class="mt-20 px-6 py-4">
+            <main class="mt-4 px-6 py-4">
                 <h1 class="text-3xl font-semibold mb-6">Dashboard</h1>
 
                 <!-- Info Cards -->

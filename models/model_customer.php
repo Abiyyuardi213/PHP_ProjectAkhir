@@ -43,12 +43,19 @@ class CustomerService {
         return $customers;
     }
 
-    public function updateCustomer($customer_id, $username, $email, $full_name, $phone_number, $address, $status) {
+    public function updateCustomer($customer_id, $username, $email, $full_name, $phone_number, $address) {
+        // Menangani null dengan mengganti dengan string kosong
+        $phone_number = $phone_number ?? ''; 
+        $address = $address ?? '';
+    
         $sql = "UPDATE tb_customer 
-                SET username = ?, email = ?, full_name = ?, phone_number = ?, address = ?, status = ? 
+                SET username = ?, email = ?, full_name = ?, phone_number = ?, address = ? 
                 WHERE customer_id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssssssi", $username, $email, $full_name, $phone_number, $address, $status, $customer_id);
+    
+        // Menyesuaikan tipe data untuk bind_param
+        $stmt->bind_param("sssssi", $username, $email, $full_name, $phone_number, $address, $customer_id);
+    
         return $stmt->execute();
     }
 

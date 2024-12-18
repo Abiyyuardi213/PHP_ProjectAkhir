@@ -41,7 +41,6 @@
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Full Name</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Phone Number</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Address</th>
-                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Status</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Created At</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Action</th>
                         </tr>
@@ -68,15 +67,8 @@
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
                                         <?= htmlspecialchars($customer['address'] ?? 'N/A') ?>
                                     </td>
-                                    <td class="py-2 px-4 border-b border-gray-200 text-center">
-                                        <?php if (isset($customer['status']) && $customer['status'] == 1) : ?>
-                                            <span class="text-green-500 font-semibold">Active</span>
-                                        <?php else : ?>
-                                            <span class="text-red-500 font-semibold">Inactive</span>
-                                        <?php endif; ?>
-                                    </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
-                                        <?= htmlspecialchars($customer['create_at'] ?? 'N/A') ?>
+                                        <?= htmlspecialchars($customer['created_at'] ?? 'N/A') ?>
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center">
                                         <a href="index.php?modul=customer&fitur=update&id=<?= htmlspecialchars($customer['customer_id'] ?? '') ?>" 
