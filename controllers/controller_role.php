@@ -79,13 +79,19 @@ class controllerRole {
             $role_description = $_POST['role_description'] ?? '';
             $role_salary = $_POST['role_salary'] ?? 0;
             $role_status = $_POST['role_status'] ?? 0;
-
-            $this->model->updateRole($role_id, $role_name, $role_description, (int)$role_salary, (int)$role_status);
-            header('Location: index.php?modul=role&fitur=list');
+    
+            $isUpdated = $this->model->updateRole($role_id, $role_name, $role_description, (int)$role_salary, (int)$role_status);
+    
+            if ($isUpdated) {
+                header('Location: index.php?modul=role&fitur=list&message=Role successfully updated');
+            } else {
+                header('Location: index.php?modul=role&fitur=update&id=' . $role_id . '&error=Failed to update role');
+            }
+            exit;
         } else {
             $role = $this->model->getRoleById($role_id);
             if (!$role) {
-                header('Location: index.php?modul=role&fitur=list&error=notfound');
+                header('Location: index.php?modul=role&fitur=list&error=Role not found');
                 exit;
             }
             include './views/role_update.php';

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
+  <title>Manage Role</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 </head>
@@ -18,15 +18,22 @@
         <div class="mt-4 p-6 flex-1 mt-16"> <!-- Menambahkan mt-16 untuk memberi ruang atas -->
             <h1 class="text-3xl font-semibold text-gray-900 mb-8">Manage Role</h1>
 
+            <!-- Display Success or Error Message -->
             <?php if (isset($_GET['message'])) : ?>
-                <div id="notification" class="flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mb-4 shadow-lg">
-                    <span class="material-icons-outlined mr-2">check_circle</span>
+                <div id="notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-4 transform transition duration-500 ease-in-out translate-x-full" style="z-index: 9999;">
+                    <span class="material-icons-outlined text-xl">check_circle</span>
                     <span><?= htmlspecialchars($_GET['message']) ?></span>
+                    <button onclick="document.getElementById('notification').style.display='none'" class="ml-4 text-white hover:text-gray-200">
+                        <span class="material-icons-outlined">close</span>
+                    </but>
                 </div>
             <?php elseif (isset($_GET['error'])) : ?>
-                <div id="notification" class="flex items-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-4 shadow-lg">
-                    <span class="material-icons-outlined mr-2">error</span>
+                <div id="notification" class="fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-4 transform transition duration-500 ease-in-out translate-x-full" style="z-index: 9999;">
+                    <span class="material-icons-outlined text-xl">error</span>
                     <span><?= htmlspecialchars($_GET['error']) ?></span>
+                    <button onclick="document.getElementById('notification').style.display='none'" class="ml-4 text-white hover:text-gray-200">
+                        <span class="material-icons-outlined">close</span>
+                    </button>
                 </div>
             <?php endif; ?>
 
@@ -145,6 +152,14 @@
     </div>
   </div>
   <script>
+    setTimeout(() => {
+        const notification = document.getElementById('notification');
+        if (notification) {
+            notification.classList.remove('translate-x-full');
+            notification.classList.add('translate-x-0');
+        }
+    }, 10);
+
     setTimeout(() => {
       const notification = document.getElementById('notification');
       if (notification) {

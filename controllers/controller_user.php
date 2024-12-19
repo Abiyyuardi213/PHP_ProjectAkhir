@@ -65,8 +65,12 @@ class controllerUser {
             $user_phone = $_POST['user_phone'];
             $role_id = $_POST['role_id'];
     
-            $this->userModel->addUser($user_name, $username, $password, $user_email, $user_phone, $role_id);
-            header('Location: index.php?modul=user');
+            $isAdded = $this->userModel->addUser($user_name, $username, $password, $user_email, $user_phone, $role_id);
+            if ($isAdded) {
+                header('Location: index.php?modul=user&fitur=list&message=User successfully added');
+            } else {
+                header('Location: index.php?modul=user&fitur=create&error=Failed to add user');
+            }
             exit;
         }
         
@@ -84,8 +88,13 @@ class controllerUser {
             $user_phone = $_POST['user_phone'];
             $role_id = $_POST['role_id'];
     
-            $this->userModel->updateUser($user_id, $user_name, $username, $password, $user_email, $user_phone, $role_id);
-            header('Location: index.php?modul=user');
+            $isUpdated = $this->userModel->updateUser($user_id, $user_name, $username, $password, $user_email, $user_phone, $role_id);
+            if ($isUpdated) {
+                header('Location: index.php?modul=user&fitur=list&message=Role successfully updated');
+            } else {
+                header('Location: index.php?modul=user&fitur=update&id=' . $user_id . '&error=Failed to update user');
+            }
+            // header('Location: index.php?modul=user');
             exit;
         }
     
@@ -95,8 +104,18 @@ class controllerUser {
     }
 
     public function deleteUsers($user_id) {
-        $this->userModel->deleteUser($user_id);
-        header('Location: index.php?modul=user');
+        if (!is_numeric($user_id) || $user_id <= 0) {
+            header('Location: index.php?modul=user&fitur=list&error=Invalid user ID');
+            exit;
+        }
+    
+        $isDeleted = $this->userModel->deleteUser($user_id);
+    
+        if ($isDeleted) {
+            header('Location: index.php?modul=user&fitur=list&message=User successfully deleted');
+        } else {
+            header('Location: index.php?modul=user&fitur=list&error=Failed to delete user');
+        }
         exit;
     }
 
