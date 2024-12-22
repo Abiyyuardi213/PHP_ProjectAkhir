@@ -14,14 +14,81 @@
 
     <!-- Main Content -->
     <div class="ml-64 flex flex-col flex-grow">
+        <!-- Header -->
+        <header class="bg-blue-700 text-white py-4 px-6 shadow-md">
+            <h1 class="text-2xl font-bold flex items-center">
+                <span class="material-icons-outlined mr-2">inventory</span>
+                Management Inventory
+            </h1>
+        </header>
+
         <!-- Content -->
-        <div class="mt-4 p-6 flex-1 mt-16"> <!-- Menambahkan mt-16 untuk memberi ruang atas -->
-            <h1 class="text-3xl font-semibold text-gray-900 mb-8">Manage Inventory</h1>
+        <div class="mt-4 p-6 flex-1 mt-16">
+            <!-- Display Success or Error Message -->
+            <?php if (isset($_GET['message'])) : ?>
+                <div id="notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-4 transform transition duration-500 ease-in-out translate-x-full" style="z-index: 9999;">
+                    <span class="material-icons-outlined text-xl">check_circle</span>
+                    <span><?= htmlspecialchars($_GET['message']) ?></span>
+                    <button onclick="document.getElementById('notification').style.display='none'" class="ml-4 text-white hover:text-gray-200">
+                        <span class="material-icons-outlined">close</span>
+                    </but>
+                </div>
+            <?php elseif (isset($_GET['error'])) : ?>
+                <div id="notification" class="fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-4 transform transition duration-500 ease-in-out translate-x-full" style="z-index: 9999;">
+                    <span class="material-icons-outlined text-xl">error</span>
+                    <span><?= htmlspecialchars($_GET['error']) ?></span>
+                    <button onclick="document.getElementById('notification').style.display='none'" class="ml-4 text-white hover:text-gray-200">
+                        <span class="material-icons-outlined">close</span>
+                    </button>
+                </div>
+            <?php endif; ?>
+
+            <!-- Form Pencarian -->
+            <form action="index.php" method="get" class="flex items-center bg-white shadow-lg rounded-full overflow-hidden mb-6 w-full max-w-lg mx-auto">
+                <input type="hidden" name="modul" value="inventory">
+                <input type="hidden" name="fitur" value="list">
+                <div class="flex items-center px-4">
+                    <span class="material-icons-outlined text-gray-400">search</span>
+                </div>
+                <input type="text" name="search" placeholder="Search inventory..." value="<?= htmlspecialchars($searchTerm ?? '') ?>"
+                    class="flex-grow py-2 px-4 border-0 focus:ring-0 focus:outline-none text-gray-700 placeholder-gray-400">
+                <button type="submit" class="bg-blue-500 px-4 py-2 text-white rounded-full hover:bg-blue-600 transition duration-300 ease-in-out">
+                    Search
+                </button>
+            </form>
 
             <!-- Tombol Add Inventory -->
-            <div class="flex justify-end mb-4">
+            <div class="flex justify-between items-center mb-6">
+                <!-- Dropdown Sort -->
+                <div class="relative inline-block text-left">
+                    <button id="sortButton" class="flex items-center bg-gradient-to-r from-gray-200 to-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow hover:from-gray-300 hover:to-gray-400 transition">
+                        <span class="material-icons-outlined mr-2">sort</span>
+                        <span>Sort</span>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="sortMenu" class="hidden absolute mt-2 w-48 rounded-lg bg-white shadow-lg z-10">
+                        <a href="index.php?modul=role&fitur=sortByName&order=ASC" 
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Sort by Name (ASC)
+                        </a>
+                        <a href="index.php?modul=role&fitur=sortByName&order=DESC" 
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Sort by Name (DESC)
+                        </a>
+                        <a href="index.php?modul=role&fitur=sortById&order=ASC" 
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Sort by ID (ASC)
+                        </a>
+                        <a href="index.php?modul=role&fitur=sortById&order=DESC" 
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Sort by ID (DESC)
+                        </a>
+                    </div>
+                </div>
+
                 <a href="index.php?modul=inventory&fitur=create" 
-                class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 shadow-lg transition duration-300">
+                   class="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3 rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition"
+                   aria-label="Add Inventory">
                     <span class="material-icons-outlined mr-2">add</span>
                     Add Inventory
                 </a>
@@ -34,9 +101,7 @@
                         <tr>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Inventory ID</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Inventory Name</th>
-                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Quantity</th>
-                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Price</th>
-                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Supplier</th>
+                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Supplier Name</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Status</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Created At</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Action</th>
@@ -53,32 +118,33 @@
                                         <?= htmlspecialchars($barang['barang_name'] ?? 'N/A') ?>
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
-                                        <?= isset($barang['barang_quantity']) ? (int)$barang['barang_quantity'] : 0 ?>
-                                    </td>
-                                    <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
-                                        Rp <?= number_format($barang['barang_price'] ?? 0, 0, ',', '.') ?>
-                                    </td>
-                                    <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
-                                        <?= htmlspecialchars($barang['barang_supplier'] ?? 'N/A') ?>
+                                        <?= htmlspecialchars($barang['supplier_name'] ?? 'N/A') ?>
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center">
-                                        <?php if (isset($barang['barang_status']) && $barang['barang_status']) : ?>
+                                        <?php if (!empty($barang['barang_status'])) : ?>
                                             <span class="text-green-500 font-semibold">Available</span>
                                         <?php else : ?>
                                             <span class="text-red-500 font-semibold">Out of Stock</span>
                                         <?php endif; ?>
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
-                                        <?= htmlspecialchars($barang['create_at'] ?? 'N/A') ?>
+                                    <?= !empty($barang['created_at']) ? htmlspecialchars(date('d M Y, H:i', strtotime($barang['created_at']))) : 'N/A' ?>
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center">
+                                        <a href="index.php?modul=inventory&fitur=detail&id=<?= htmlspecialchars($barang['barang_id'] ?? '') ?>" 
+                                            class="inline-flex items-center px-2 py-1 text-sm text-blue-500 bg-blue-100 rounded hover:bg-blue-200 transition"
+                                            aria-label="Show Details">
+                                            <span class="material-icons-outlined mr-1">visibility</span> Details
+                                        </a>
                                         <a href="index.php?modul=inventory&fitur=update&id=<?= htmlspecialchars($barang['barang_id'] ?? '') ?>" 
-                                        class="inline-flex items-center px-2 py-1 text-sm text-yellow-500 bg-yellow-100 rounded hover:bg-yellow-200 transition">
+                                           class="inline-flex items-center px-2 py-1 text-sm text-yellow-500 bg-yellow-100 rounded hover:bg-yellow-200 transition ml-2"
+                                           aria-label="Edit Inventory">
                                             <span class="material-icons-outlined mr-1">edit</span>
                                         </a>
                                         <a href="index.php?modul=inventory&fitur=delete&id=<?= htmlspecialchars($barang['barang_id'] ?? '') ?>" 
-                                        class="inline-flex items-center px-2 py-1 text-sm text-red-500 bg-red-100 rounded hover:bg-red-200 transition ml-2"
-                                        onclick="return confirm('Are you sure you want to delete this inventory?')">
+                                           class="inline-flex items-center px-2 py-1 text-sm text-red-500 bg-red-100 rounded hover:bg-red-200 transition ml-2"
+                                           onclick="return confirm('Are you sure you want to delete this inventory?')"
+                                           aria-label="Delete Inventory">
                                             <span class="material-icons-outlined mr-1">delete</span>
                                         </a>
                                     </td>
@@ -86,7 +152,7 @@
                             <?php endforeach; ?>
                         <?php else : ?>
                             <tr>
-                                <td colspan="8" class="py-4 px-4 text-center text-gray-500">
+                                <td colspan="6" class="py-4 px-4 text-center text-gray-500">
                                     No Inventory available.
                                 </td>
                             </tr>

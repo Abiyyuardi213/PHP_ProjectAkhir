@@ -14,10 +14,16 @@
 
         <!-- Main Content -->
         <div class="ml-64 flex flex-col flex-grow">
+            <!-- Header -->
+            <header class="bg-blue-700 text-white py-4 px-6 shadow-md">
+                <h1 class="text-2xl font-bold flex items-center">
+                    <span class="material-icons-outlined mr-2">group</span>
+                    Management User
+                </h1>
+            </header>
+
             <!-- Content -->
             <div class="mt-4 p-6 flex-1 mt-16">
-                <h1 class="text-3xl font-semibold text-gray-900 mb-8">Manage User</h1>
-
                 <?php if (isset($_GET['message'])) : ?>
                     <div id="notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-4 transform transition duration-500 ease-in-out translate-x-full" style="z-index: 9999;">
                         <span class="material-icons-outlined text-xl">check_circle</span>
@@ -80,7 +86,7 @@
                     </div>
 
                     <a href="index.php?modul=user&fitur=create" 
-                       class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 shadow-md transition duration-300">
+                       class="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3 rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition">
                         <span class="material-icons-outlined mr-2">add</span>
                         Create User
                     </a>

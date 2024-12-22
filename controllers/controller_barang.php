@@ -1,11 +1,14 @@
 <?php
 include 'models/model_barang.php';
+include 'models/model_supplier.php';
 
 class ControllerBarang {
-    private $model;
+    private $modelBarang;
+    private $modelSupplier;
 
     public function __construct($conn) {
-        $this->model = new ModelBarang($conn);
+        $this->modelBarang = new ModelBarang($conn);
+        $this->modelSupplier = new ModelSupplier($conn);
     }
 
     public function handleRequestBarang($fitur) {
@@ -14,6 +17,15 @@ class ControllerBarang {
         switch ($fitur) {
             case 'create':
                 $this->createBarang();
+                break;
+
+            case 'detail':
+                $barang_id = $_GET['id'] ?? null;
+                if ($barang_id) {
+                    $this->viewDetailInventory($barang_id);
+                } else {
+                    echo "Inventory ID not found.";
+                }
                 break;
 
             case 'update':
@@ -37,79 +49,135 @@ class ControllerBarang {
                 break;
 
             default:
-                $this->listBarang();
+                $this->listBarangs();
+                // $this->listBarang();
                 break;
         }
     }
 
-    public function listBarang() {
-        $barangs = $this->model->getBarangs();
+    public function listBarangs() {
+        $searchTerm = $_GET['search'] ?? null;
+        if ($searchTerm) {
+            $barangs = $this->modelBarang->searchBarangByName($searchTerm);
+        } else {
+            $barangs = $this->modelBarang->getBarangs();
+        }
         include './views/inventory_list.php';
+    }
+
+    public function listBarang() {
+        $barangs = $this->modelBarang->getBarangs();
+    
+        $baranglist = array_map(function($barang) {
+            return [
+                'barang_id' => $barang['barang_id'],
+                'barang_name' => $barang['barang_name'],
+                'supplier_name' => $barang['supplier_name'],
+                'barang_status' => $barang['barang_status'],
+                'created_at' => isset($barang['created_at']) ? $barang['created_at'] : 'N/A',
+            ];
+        }, $barangs);
+    
+        include './views/inventory_list.php';
+    }
+
+    public function viewDetailInventory($barang_id) {
+        $barang = $this->modelBarang->getBarangById($barang_id);
+        if (!$barang) {
+            echo "Inventory data not found.";
+            return;
+        }
+        include './views/inventory_detail.php';
     }
 
     public function createBarang() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $barang_name = $_POST['barang_name'] ?? '';
-            $barang_quantity = intval($_POST['barang_quantity'] ?? 0);
+            $barang_name = htmlspecialchars(trim($_POST['barang_name'] ?? ''));
+            $supplier_id = intval($_POST['supplier_id'] ?? 0);
+            $supplier_phone = htmlspecialchars(trim($_POST['supplier_phone'] ?? ''));
+            $supplier_email = htmlspecialchars(trim($_POST['supplier_email'] ?? ''));
             $barang_price = floatval($_POST['barang_price'] ?? 0);
-            $barang_supplier = $_POST['barang_supplier'] ?? 'Unknown';
+            $barang_quantity = intval($_POST['barang_quantity'] ?? 0);
+            $barang_penerima = htmlspecialchars(trim($_POST['barang_penerima'] ?? ''));
             $barang_status = intval($_POST['barang_status'] ?? 0);
+            $invoice_id = htmlspecialchars(trim($_POST['invoice_id'] ?? ''));
 
-            if (empty($barang_name)) {
-                $errorMessage = "Inventory name is required.";
-            } elseif ($barang_quantity < 0 || $barang_price < 0) {
-                $errorMessage = "Quantity and price must be non-negative.";
+            if ($supplier_id <= 0) {
+                echo "Supplier belum dipilih.";
+                include './views/inventory_add.php';
+                return;
+            }
+
+            $result = $this->modelBarang->addBarang($invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima, $barang_status);
+            
+            if ($result) {
+                $this->redirectToListWithMessage('Barang berhasil ditambahkan.');
             } else {
-                if ($this->model->addBarang($barang_name, $barang_quantity, $barang_price, $barang_supplier, $barang_status)) {
-                    $this->redirectToList();
-                } else {
-                    $errorMessage = "Failed to add inventory.";
-                }
+                echo "Gagal menambahkan barang.";
             }
         }
+
+        $suppliers = $this->modelSupplier->getAllSuppliers();
+
         include './views/inventory_add.php';
     }
 
     public function updateBarang($barang_id) {
+        $barang = $this->modelBarang->getBarangById($barang_id);
+        if (!$barang) {
+            $this->redirectToListWithMessage('Barang tidak ditemukan.');
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $barang_name = $_POST['barang_name'] ?? '';
-            $barang_quantity = intval($_POST['barang_quantity'] ?? 0);
+            $barang_name = htmlspecialchars(trim($_POST['barang_name'] ?? ''));
+            $supplier_id = intval($_POST['supplier_id'] ?? 0);
+            $supplier_phone = htmlspecialchars(trim($_POST['supplier_phone'] ?? ''));
+            $supplier_email = htmlspecialchars(trim($_POST['supplier_email'] ?? ''));
             $barang_price = floatval($_POST['barang_price'] ?? 0);
-            $barang_supplier = $_POST['barang_supplier'] ?? 'Unknown';
+            $barang_quantity = intval($_POST['barang_quantity'] ?? 0);
+            $barang_penerima = htmlspecialchars(trim($_POST['barang_penerima'] ?? ''));
             $barang_status = intval($_POST['barang_status'] ?? 0);
-    
-            if ($this->model->updateBarang($barang_id, $barang_name, $barang_quantity, $barang_price, $barang_supplier, $barang_status)) {
-                header('Location: index.php?modul=inventory&fitur=list&message=update_success');
-                exit();
+            $invoice_id = htmlspecialchars(trim($_POST['invoice_id'] ?? ''));
+
+            if (empty($barang_name)) {
+                $errorMessage = "Nama barang wajib diisi.";
+            } elseif ($supplier_id <= 0) {
+                $errorMessage = "Supplier tidak valid.";
             } else {
-                echo "<div class='error'>Failed to update inventory. Please try again.</div>";
+                if ($this->modelBarang->updateBarang($barang_id, $invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima, $barang_status)) {
+                    $this->redirectToListWithMessage('Barang berhasil diperbarui.');
+                } else {
+                    $errorMessage = "Gagal memperbarui barang.";
+                }
             }
         }
-        $barang = $this->model->getBarangById($barang_id);
-        if (!$barang) {
-            echo "<div class='error'>Barang tidak ditemukan.</div>";
-            header('Location: index.php?modul=inventory&fitur=list');
-            exit();
-        }
+
+        $suppliers = $this->modelSupplier->getAllSuppliers();
+
         include './views/inventory_update.php';
     }
 
     public function deleteBarang($barang_id) {
-        if ($this->model->deleteBarang($barang_id)) {
-            $this->redirectToList();
+        if ($this->modelBarang->deleteBarang($barang_id)) {
+            $this->redirectToListWithMessage('Barang berhasil dihapus.');
         } else {
-            echo "Failed to delete inventory.";
+            $this->redirectToListWithMessage('Gagal menghapus barang.');
         }
     }
 
     public function searchBarang() {
-        $keyword = $_GET['keyword'] ?? '';
-        $barangs = $this->model->searchBarangByName($keyword);
+        $keyword = htmlspecialchars(trim($_GET['keyword'] ?? ''));
+        $barangs = $this->modelBarang->searchBarangByName($keyword);
         include './views/inventory_search.php';
     }
 
     private function redirectToList() {
         header('Location: index.php?modul=inventory&fitur=list');
-        exit;
+        exit();
+    }
+
+    private function redirectToListWithMessage($message) {
+        header('Location: index.php?modul=inventory&fitur=list&message=' . urlencode($message));
+        exit();
     }
 }

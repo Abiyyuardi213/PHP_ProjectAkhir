@@ -36,9 +36,17 @@ $transactionCount = count($transactions);
 
         <!-- Main Content -->
         <div class="ml-64 flex flex-col flex-grow">
+
+            <!-- Header -->
+            <header class="bg-blue-700 text-white py-4 px-6 shadow-md">
+                <h1 class="text-2xl font-bold flex items-center">
+                    <span class="material-icons-outlined mr-2">dashboard</span>
+                    Dashboard
+                </h1>
+            </header>
             <!-- Content -->
             <main class="mt-4 px-6 py-4">
-                <h1 class="text-3xl font-semibold mb-6">Dashboard</h1>
+                <h1 class="text-3xl font-semibold mb-6">Your's Management Information</h1>
 
                 <!-- Info Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">

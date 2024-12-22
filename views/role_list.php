@@ -14,9 +14,16 @@
 
     <!-- Main Content -->
     <div class="ml-64 flex flex-col flex-grow">
+        <!-- Header -->
+        <header class="bg-blue-700 text-white py-4 px-6 shadow-md">
+            <h1 class="text-2xl font-bold flex items-center">
+                <span class="material-icons-outlined mr-2">badge</span>
+                Management Role
+            </h1>
+        </header>
         <!-- Content -->
         <div class="mt-4 p-6 flex-1 mt-16"> <!-- Menambahkan mt-16 untuk memberi ruang atas -->
-            <h1 class="text-3xl font-semibold text-gray-900 mb-8">Manage Role</h1>
+            <!-- <h1 class="text-3xl font-semibold text-gray-900 mb-8">Manage Role</h1> -->
 
             <!-- Display Success or Error Message -->
             <?php if (isset($_GET['message'])) : ?>
