@@ -38,42 +38,44 @@
 
         <!-- Inventory Information -->
         <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
-        <h2 class="text-xl font-semibold text-gray-800 border-b pb-4 mb-4">Inventory Information</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <h2 class="text-xl font-semibold text-gray-800 border-b pb-4 mb-4">Inventory Information</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div class="flex items-center">
-            <span class="material-icons-outlined text-blue-700 mr-3">tag</span>
-            <div>
+              <span class="material-icons-outlined text-blue-700 mr-3">tag</span>
+              <div>
                 <p class="text-sm text-gray-500">Inventory ID</p>
                 <p class="text-lg font-medium text-gray-900"><?= htmlspecialchars($barang['barang_id']) ?></p>
-            </div>
+              </div>
             </div>
 
             <div class="flex items-center">
-            <span class="material-icons-outlined text-blue-700 mr-3">event</span>
-            <div>
+              <span class="material-icons-outlined text-blue-700 mr-3">event</span>
+              <div>
                 <p class="text-sm text-gray-500">Date</p>
-                <p class="text-lg font-medium text-gray-900"><?= htmlspecialchars($barang['created_at']) ?></p>
-            </div>
+                <p class="text-lg font-medium text-gray-900">
+                  <?= !empty($barang['created_at']) ? htmlspecialchars(date('d M Y, H:i', strtotime($barang['created_at']))) : 'N/A' ?>
+                </p>
+              </div>
             </div>
 
             <div class="flex items-center">
-            <span class="material-icons-outlined text-blue-700 mr-3">check_circle</span>
-            <div>
+              <span class="material-icons-outlined text-blue-700 mr-3">check_circle</span>
+              <div>
                 <p class="text-sm text-gray-500">Status</p>
                 <p class="text-lg font-medium <?= $barang['barang_status'] == 1 ? 'text-green-600' : 'text-yellow-600' ?>">
                 <?= $barang['barang_status'] == 1 ? 'Available' : 'Out of Stock' ?>
                 </p>
-            </div>
+              </div>
             </div>
 
             <div class="flex items-center">
-            <span class="material-icons-outlined text-blue-700 mr-3">local_shipping</span>
-            <div>
+              <span class="material-icons-outlined text-blue-700 mr-3">local_shipping</span>
+              <div>
                 <p class="text-sm text-gray-500">Supplier</p>
                 <p class="text-lg font-medium text-gray-900"><?= isset($barang['supplier_name']) ? htmlspecialchars($barang['supplier_name']) : 'Supplier Tidak Diketahui' ?></p>
+              </div>
             </div>
-            </div>
-        </div>
+          </div>
         </div>
 
         <!-- Item Details -->

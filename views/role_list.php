@@ -179,7 +179,6 @@
         menu.classList.toggle('hidden');
     });
 
-    // Menutup dropdown jika klik di luar
     window.addEventListener('click', function(e) {
         const menu = document.getElementById('sortMenu');
         const button = document.getElementById('sortButton');

@@ -23,7 +23,8 @@ class ModelBarang implements InterfaceBarang {
                     i.barang_id,
                     i.barang_name,
                     s.supplier_name,
-                    i.barang_status
+                    i.barang_status,
+                    i.created_at
                 FROM tb_inventory i
                 LEFT JOIN tb_supplier s ON i.supplier_id = s.supplier_id";
         $result = $this->conn->query($sql);
@@ -37,8 +38,40 @@ class ModelBarang implements InterfaceBarang {
         return $barangs;
     }
 
+    // public function getBarangById($barang_id) {
+    //     $query = "SELECT * FROM tb_inventory JOIN tb_supplier ON tb_supplier.supplier_id = tb_inventory.supplier_id WHERE barang_id = ?";
+    //     $stmt = $this->conn->prepare($query);
+    //     $stmt->bind_param("i", $barang_id);
+    //     $stmt->execute();
+    //     $result = $stmt->get_result();
+    
+    //     if ($result->num_rows > 0) {
+    //         $barang = $result->fetch_assoc();
+            
+    //         $query_detail = "SELECT * FROM tb_inventory WHERE barang_id = ?";
+    //         $stmt_detail = $this->conn->prepare($query_detail);
+    //         $stmt_detail->bind_param("i", $barang_id);
+    //         $stmt_detail->execute();
+    //         $result_detail = $stmt_detail->get_result();
+            
+    //         $details = [];
+    //         while ($detail = $result_detail->fetch_assoc()) {
+    //             $details[] = $detail;
+    //         }
+            
+    //         $barang['detail'] = $details;
+    //         return $barang;
+    //     }
+    
+    //     return null;
+    // }
+
     public function getBarangById($barang_id) {
-        $query = "SELECT * FROM tb_inventory JOIN tb_supplier ON tb_supplier.supplier_id = tb_inventory.supplier_id WHERE barang_id = ?";
+        // Query to fetch inventory details along with supplier details for a single item
+        $query = "SELECT tb_inventory.*, tb_supplier.supplier_name 
+                  FROM tb_inventory 
+                  JOIN tb_supplier ON tb_supplier.supplier_id = tb_inventory.supplier_id 
+                  WHERE tb_inventory.barang_id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $barang_id);
         $stmt->execute();
@@ -46,8 +79,8 @@ class ModelBarang implements InterfaceBarang {
     
         if ($result->num_rows > 0) {
             $barang = $result->fetch_assoc();
-            
-            $query_detail = "SELECT * FROM tb_inventory WHERE barang_id = ?";
+
+                    $query_detail = "SELECT * FROM tb_inventory WHERE barang_id = ?";
             $stmt_detail = $this->conn->prepare($query_detail);
             $stmt_detail->bind_param("i", $barang_id);
             $stmt_detail->execute();
@@ -57,11 +90,12 @@ class ModelBarang implements InterfaceBarang {
             while ($detail = $result_detail->fetch_assoc()) {
                 $details[] = $detail;
             }
-            
+
             $barang['detail'] = $details;
             return $barang;
         }
     
+        // Return null if no record is found
         return null;
     }
 
@@ -109,34 +143,35 @@ class ModelBarang implements InterfaceBarang {
             $barangs[] = $row;
         }
         return $barangs;
-        // $sql = "SELECT
-        //             barang_id,
-        //             invoice_id,
-        //             supplier_id,
-        //             supplier_phone,
-        //             supplier_email,
-        //             barang_name,
-        //             barang_price,
-        //             barang_quantity,
-        //             barang_penerima,
-        //             barang_status,
-        //             created_at
-        //         FROM tb_inventory
-        //         WHERE barang_name LIKE ?";
-        // $stmt = $this->conn->prepare($sql);
-        // $likeTerm = "%$searchTerm%";
-        // $stmt->bind_param("s", $likeTerm);
-        // $stmt->execute();
-        // $result = $stmt->get_result();
-
-        // $barangs = [];
-        // while ($row = $result->fetch_assoc()) {
-        //     $barangs[] = $row;
-        // }
-        // return $barangs;
     }
 
     public function getAllBarangs() {
         return $this->getBarangs();
+    }
+
+    public function sortInventoryByName($order = 'ASC') {
+        global $conn;
+        $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+        $sql = "SELECT * FROM tb_inventory ORDER BY barang_name $order";
+        $result = $conn->query($sql);
+
+        $barangs = [];
+        while ($row = $result->fetch_assoc()) {
+            $barangs[] = $row;
+        }
+        return $barangs;
+    }
+
+    public function sortInventoryById($order = 'ASC') {
+        global $conn;
+        $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+        $sql = "SELECT * FROM tb_inventory ORDER BY barang_id $order";
+        $result = $conn->query($sql);
+
+        $barangs = [];
+        while ($row = $result->fetch_assoc()) {
+            $barangs[] = $row;
+        }
+        return $barangs;
     }
 }

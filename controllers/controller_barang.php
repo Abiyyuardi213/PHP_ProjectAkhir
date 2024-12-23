@@ -50,7 +50,6 @@ class ControllerBarang {
 
             default:
                 $this->listBarangs();
-                // $this->listBarang();
                 break;
         }
     }
@@ -62,22 +61,6 @@ class ControllerBarang {
         } else {
             $barangs = $this->modelBarang->getBarangs();
         }
-        include './views/inventory_list.php';
-    }
-
-    public function listBarang() {
-        $barangs = $this->modelBarang->getBarangs();
-    
-        $baranglist = array_map(function($barang) {
-            return [
-                'barang_id' => $barang['barang_id'],
-                'barang_name' => $barang['barang_name'],
-                'supplier_name' => $barang['supplier_name'],
-                'barang_status' => $barang['barang_status'],
-                'created_at' => isset($barang['created_at']) ? $barang['created_at'] : 'N/A',
-            ];
-        }, $barangs);
-    
         include './views/inventory_list.php';
     }
 
@@ -179,5 +162,16 @@ class ControllerBarang {
     private function redirectToListWithMessage($message) {
         header('Location: index.php?modul=inventory&fitur=list&message=' . urlencode($message));
         exit();
+    }
+
+    public function sortInventory($criteria, $order) {
+        if ($criteria == 'name') {
+            $barangs = $this->modelBarang->sortInventoryByName($order);
+        } elseif ($criteria === 'id') {
+            $barangs = $this->modelBarang->sortInventoryById($order);
+        } else {
+            $barangs = $this->modelBarang->getBarangs();
+        }
+        include './views/inventory_list.php';
     }
 }

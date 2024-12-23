@@ -67,19 +67,19 @@
                     </button>
                     <!-- Dropdown Menu -->
                     <div id="sortMenu" class="hidden absolute mt-2 w-48 rounded-lg bg-white shadow-lg z-10">
-                        <a href="index.php?modul=role&fitur=sortByName&order=ASC" 
+                        <a href="index.php?modul=inventory&fitur=sortByName&order=ASC" 
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Sort by Name (ASC)
                         </a>
-                        <a href="index.php?modul=role&fitur=sortByName&order=DESC" 
+                        <a href="index.php?modul=inventory&fitur=sortByName&order=DESC" 
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Sort by Name (DESC)
                         </a>
-                        <a href="index.php?modul=role&fitur=sortById&order=ASC" 
+                        <a href="index.php?modul=inventory&fitur=sortById&order=ASC" 
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Sort by ID (ASC)
                         </a>
-                        <a href="index.php?modul=role&fitur=sortById&order=DESC" 
+                        <a href="index.php?modul=inventory&fitur=sortById&order=DESC" 
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Sort by ID (DESC)
                         </a>
@@ -163,5 +163,34 @@
         </div>
     </div>
   </div>
+  <script>
+    setTimeout(() => {
+        const notification = document.getElementById('notification');
+        if (notification) {
+            notification.classList.remove('translate-x-full');
+            notification.classList.add('translate-x-0');
+        }
+    }, 10);
+
+    setTimeout(() => {
+      const notification = document.getElementById('notification');
+      if (notification) {
+        notification.style.display = 'none';
+      }
+    }, 3000);
+
+    document.getElementById('sortButton').addEventListener('click', function() {
+        const menu = document.getElementById('sortMenu');
+        menu.classList.toggle('hidden');
+    });
+
+    window.addEventListener('click', function(e) {
+        const menu = document.getElementById('sortMenu');
+        const button = document.getElementById('sortButton');
+        if (!button.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.add('hidden');
+        }
+    });
+  </script>
 </body>
 </html>
