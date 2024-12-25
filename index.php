@@ -1,7 +1,20 @@
 <?php
 session_start();
+
 $modul = $_GET['modul'] ?? 'dashboard';
 $fitur = $_GET['fitur'] ?? 'list';
+
+// Redirect to login if user is not logged in and not accessing the login page
+// if (!isset($_SESSION['user_id']) && !($modul === 'user' && $fitur === 'login')) {
+//     header('Location: index.php?modul=user&fitur=login');
+//     exit();
+// }
+
+// // Redirect to dashboard if user is already logged in and trying to access the login page
+// if (isset($_SESSION['user_id']) && $modul === 'user' && $fitur === 'login') {
+//     header('Location: index.php?modul=dashboard&fitur=list');
+//     exit();
+// }
 
 switch ($modul) {
     case 'dashboard':

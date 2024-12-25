@@ -1,41 +1,34 @@
 <?php
-include './models/model_customer.php';
+include './models/model_barang.php';
 include './config/db_connect.php';
 
-// Menampilkan semua error (untuk debugging)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-// Inisialisasi model
-$model = new CustomerService($conn);
+$barangs = [
+    [
+        'invoice_id' => 'INV001',
+        'supplier_id' => 1,
+        'supplier_phone' => '08123456789',
+        'supplier_email' => 'supplier1@example.com',
+        'barang_name' => 'Barang A',
+        'barang_price' => 10000,
+        'barang_quantity' => 5,
+        'barang_penerima' => 'John Doe'
+    ],
+    [
+        'invoice_id' => 'INV001',
+        'supplier_id' => 1,
+        'supplier_phone' => '08123456789',
+        'supplier_email' => 'supplier1@example.com',
+        'barang_name' => 'Barang B',
+        'barang_price' => 20000,
+        'barang_quantity' => 10,
+        'barang_penerima' => 'John Doe'
+    ]
+];
 
 try {
-    // 1. Tambahkan customer baru
-    $newCustomerId = $model->createCustomer(
-        'john_doe', 
-        'password123', 
-        'johndoe@example.com', 
-        'John Doe', 
-        '081234567890', 
-        '123 Main Street', 
-    );
-    echo "Customer berhasil ditambahkan dengan ID: " . htmlspecialchars($newCustomerId) . "<br>";
-
-    // 2. Ambil semua data customer
-    $allCustomers = $model->getAllCustomers();
-    echo "<h3>Daftar Customer:</h3><pre>";
-    print_r($allCustomers);
-    echo "</pre>";
-
-    // 3. Ambil detail customer berdasarkan ID
-    $customerDetails = $model->getCustomerById($newCustomerId);
-    echo "<h3>Detail Customer:</h3><pre>";
-    print_r($customerDetails);
-    echo "</pre>";
-
+    $modelBarang = new ModelBarang($conn);
+    $modelBarang->addMultipleBarangs($barangs);
+    echo "Barang berhasil ditambahkan.";
 } catch (Exception $e) {
-    // Tampilkan pesan error untuk debugging
-    echo "Terjadi kesalahan: " . htmlspecialchars($e->getMessage());
+    echo "Error: " . $e->getMessage();
 }
-?>

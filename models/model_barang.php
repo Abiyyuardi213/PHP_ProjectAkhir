@@ -1,17 +1,7 @@
 <?php
 include './config/db_connect.php';
 
-interface InterfaceBarang {
-    public function getBarangs();
-    public function getBarangById($barang_id);
-    public function addBarang($invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima, $barang_status);
-    public function updateBarang($barang_id, $invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima, $barang_status);
-    public function deleteBarang($barang_id);
-    public function searchBarangByName($keyword);
-    public function getAllBarangs();
-}
-
-class ModelBarang implements InterfaceBarang {
+class ModelBarang {
     private $conn;
 
     public function __construct($conn) {
@@ -23,7 +13,6 @@ class ModelBarang implements InterfaceBarang {
                     i.barang_id,
                     i.barang_name,
                     s.supplier_name,
-                    i.barang_status,
                     i.created_at
                 FROM tb_inventory i
                 LEFT JOIN tb_supplier s ON i.supplier_id = s.supplier_id";
@@ -38,36 +27,7 @@ class ModelBarang implements InterfaceBarang {
         return $barangs;
     }
 
-    // public function getBarangById($barang_id) {
-    //     $query = "SELECT * FROM tb_inventory JOIN tb_supplier ON tb_supplier.supplier_id = tb_inventory.supplier_id WHERE barang_id = ?";
-    //     $stmt = $this->conn->prepare($query);
-    //     $stmt->bind_param("i", $barang_id);
-    //     $stmt->execute();
-    //     $result = $stmt->get_result();
-    
-    //     if ($result->num_rows > 0) {
-    //         $barang = $result->fetch_assoc();
-            
-    //         $query_detail = "SELECT * FROM tb_inventory WHERE barang_id = ?";
-    //         $stmt_detail = $this->conn->prepare($query_detail);
-    //         $stmt_detail->bind_param("i", $barang_id);
-    //         $stmt_detail->execute();
-    //         $result_detail = $stmt_detail->get_result();
-            
-    //         $details = [];
-    //         while ($detail = $result_detail->fetch_assoc()) {
-    //             $details[] = $detail;
-    //         }
-            
-    //         $barang['detail'] = $details;
-    //         return $barang;
-    //     }
-    
-    //     return null;
-    // }
-
     public function getBarangById($barang_id) {
-        // Query to fetch inventory details along with supplier details for a single item
         $query = "SELECT tb_inventory.*, tb_supplier.supplier_name 
                   FROM tb_inventory 
                   JOIN tb_supplier ON tb_supplier.supplier_id = tb_inventory.supplier_id 
@@ -94,32 +54,77 @@ class ModelBarang implements InterfaceBarang {
             $barang['detail'] = $details;
             return $barang;
         }
-    
-        // Return null if no record is found
         return null;
     }
 
-    public function addBarang($invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima, $barang_status) {
-        $sql = "INSERT INTO tb_inventory (invoice_id, supplier_id, supplier_phone, supplier_email, barang_name, barang_price, barang_quantity, barang_penerima, barang_status, created_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+    public function addBarang($invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima) {
+        $sql = "INSERT INTO tb_inventory (invoice_id, supplier_id, supplier_phone, supplier_email, barang_name, barang_price, barang_quantity, barang_penerima, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) {
             die("Prepare statement failed: " . $this->conn->error);
         }
-        $stmt->bind_param("sissssiss", $invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima, $barang_status);
+        $stmt->bind_param("sissssis", $invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima);
         if (!$stmt->execute()) {
             die("Execution failed: " . $stmt->error);
         }
         return true;
     }
 
-    public function updateBarang($barang_id, $invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima, $barang_status) {
+    public function addMultipleBarangs($barangs) {
+        $sql = "INSERT INTO tb_inventory (invoice_id, supplier_id, supplier_phone, supplier_email, barang_name, barang_price, barang_quantity, barang_penerima, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+        $stmt = $this->conn->prepare($sql);
+    
+        if (!$stmt) {
+            throw new Exception("Error preparing statement: " . $this->conn->error);
+        }
+    
+        foreach ($barangs as $barang) {
+            if (
+                !isset($barang['invoice_id'], $barang['supplier_id'], $barang['supplier_phone'], $barang['supplier_email'],
+                    $barang['barang_name'], $barang['barang_price'], $barang['barang_quantity'], $barang['barang_penerima'])
+            ) {
+                throw new Exception("Invalid barang data: missing required fields");
+            }
+    
+            $stmt->bind_param(
+                "sissssis", 
+                $barang['invoice_id'], 
+                $barang['supplier_id'], 
+                $barang['supplier_phone'], 
+                $barang['supplier_email'], 
+                $barang['barang_name'], 
+                $barang['barang_price'], 
+                $barang['barang_quantity'], 
+                $barang['barang_penerima']
+            );
+    
+            if (!$stmt->execute()) {
+                throw new Exception("Error executing statement for barang: " . $stmt->error);
+            }
+        }
+    
+        return true;
+    }
+
+    public function updateBarang($barang_id, $invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima) {
         $sql = "UPDATE tb_inventory 
-                SET invoice_id = ?, supplier_id = ?, supplier_phone = ?, supplier_email = ?, barang_name = ?, barang_price = ?, barang_quantity = ?, barang_penerima = ?, barang_status = ?
+                SET invoice_id = ?, supplier_id = ?, supplier_phone = ?, supplier_email = ?, barang_name = ?, barang_price = ?, barang_quantity = ?, barang_penerima = ?
                 WHERE barang_id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("sissssissi", $invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima, $barang_status, $barang_id);
-        return $stmt->execute();
+    
+        if (!$stmt) {
+            throw new Exception("Error preparing statement: " . $this->conn->error);
+        }
+
+        $stmt->bind_param("sissssisi", $invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima, $barang_id);
+    
+        if (!$stmt->execute()) {
+            throw new Exception("Error executing statement: " . $stmt->error);
+        }
+    
+        return $stmt->affected_rows > 0; // Mengembalikan true jika ada baris yang diperbarui
     }
 
     public function deleteBarang($barang_id) {

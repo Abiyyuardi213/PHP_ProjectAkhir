@@ -13,6 +13,7 @@ class ControllerBarang {
 
     public function handleRequestBarang($fitur) {
         $barang_id = $_GET['id'] ?? null;
+        $order = $_GET['order'] ?? 'ASC';
 
         switch ($fitur) {
             case 'create':
@@ -48,6 +49,14 @@ class ControllerBarang {
                 $this->searchBarang();
                 break;
 
+            case 'sortByName':
+                $this->sortInventory('name', $order);
+                break;
+
+            case 'sortById':
+                $this->sortInventory('id', $order);
+                break;
+
             default:
                 $this->listBarangs();
                 break;
@@ -75,33 +84,47 @@ class ControllerBarang {
 
     public function createBarang() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $barang_name = htmlspecialchars(trim($_POST['barang_name'] ?? ''));
-            $supplier_id = intval($_POST['supplier_id'] ?? 0);
-            $supplier_phone = htmlspecialchars(trim($_POST['supplier_phone'] ?? ''));
-            $supplier_email = htmlspecialchars(trim($_POST['supplier_email'] ?? ''));
-            $barang_price = floatval($_POST['barang_price'] ?? 0);
-            $barang_quantity = intval($_POST['barang_quantity'] ?? 0);
-            $barang_penerima = htmlspecialchars(trim($_POST['barang_penerima'] ?? ''));
-            $barang_status = intval($_POST['barang_status'] ?? 0);
-            $invoice_id = htmlspecialchars(trim($_POST['invoice_id'] ?? ''));
-
-            if ($supplier_id <= 0) {
-                echo "Supplier belum dipilih.";
-                include './views/inventory_add.php';
-                return;
+            $barangs = $_POST['barangs'] ?? [];
+            $validBarangs = [];
+    
+            foreach ($barangs as $barang) {
+                $barang_name = htmlspecialchars(trim($barang['barang_name'] ?? ''));
+                $supplier_id = intval($barang['supplier_id'] ?? 0);
+                $supplier_phone = htmlspecialchars(trim($barang['supplier_phone'] ?? ''));
+                $supplier_email = htmlspecialchars(trim($barang['supplier_email'] ?? ''));
+                $barang_price = floatval($barang['barang_price'] ?? 0);
+                $barang_quantity = intval($barang['barang_quantity'] ?? 0);
+                $barang_penerima = htmlspecialchars(trim($barang['barang_penerima'] ?? ''));
+                $invoice_id = htmlspecialchars(trim($barang['invoice_id'] ?? ''));
+    
+                if (empty($barang_name) || $supplier_id <= 0 || $barang_price <= 0 || $barang_quantity <= 0) {
+                    echo "Data barang tidak valid. Pastikan semua kolom diisi dengan benar.";
+                    include './views/inventory_add.php';
+                    return;
+                }
+    
+                $validBarangs[] = [
+                    'invoice_id' => $invoice_id,
+                    'supplier_id' => $supplier_id,
+                    'supplier_phone' => $supplier_phone,
+                    'supplier_email' => $supplier_email,
+                    'barang_name' => $barang_name,
+                    'barang_price' => $barang_price,
+                    'barang_quantity' => $barang_quantity,
+                    'barang_penerima' => $barang_penerima
+                ];
             }
-
-            $result = $this->modelBarang->addBarang($invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima, $barang_status);
-            
-            if ($result) {
+    
+            // Tambahkan barang menggunakan metode batch
+            try {
+                $this->modelBarang->addMultipleBarangs($validBarangs);
                 $this->redirectToListWithMessage('Barang berhasil ditambahkan.');
-            } else {
-                echo "Gagal menambahkan barang.";
+            } catch (Exception $e) {
+                echo "Gagal menambahkan barang: " . $e->getMessage();
             }
         }
-
+    
         $suppliers = $this->modelSupplier->getAllSuppliers();
-
         include './views/inventory_add.php';
     }
 
@@ -119,7 +142,6 @@ class ControllerBarang {
             $barang_price = floatval($_POST['barang_price'] ?? 0);
             $barang_quantity = intval($_POST['barang_quantity'] ?? 0);
             $barang_penerima = htmlspecialchars(trim($_POST['barang_penerima'] ?? ''));
-            $barang_status = intval($_POST['barang_status'] ?? 0);
             $invoice_id = htmlspecialchars(trim($_POST['invoice_id'] ?? ''));
 
             if (empty($barang_name)) {
@@ -127,7 +149,7 @@ class ControllerBarang {
             } elseif ($supplier_id <= 0) {
                 $errorMessage = "Supplier tidak valid.";
             } else {
-                if ($this->modelBarang->updateBarang($barang_id, $invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima, $barang_status)) {
+                if ($this->modelBarang->updateBarang($barang_id, $invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima)) {
                     $this->redirectToListWithMessage('Barang berhasil diperbarui.');
                 } else {
                     $errorMessage = "Gagal memperbarui barang.";

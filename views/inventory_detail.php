@@ -56,17 +56,7 @@
                   <?= !empty($barang['created_at']) ? htmlspecialchars(date('d M Y, H:i', strtotime($barang['created_at']))) : 'N/A' ?>
                 </p>
               </div>
-            </div>
-
-            <div class="flex items-center">
-              <span class="material-icons-outlined text-blue-700 mr-3">check_circle</span>
-              <div>
-                <p class="text-sm text-gray-500">Status</p>
-                <p class="text-lg font-medium <?= $barang['barang_status'] == 1 ? 'text-green-600' : 'text-yellow-600' ?>">
-                <?= $barang['barang_status'] == 1 ? 'Available' : 'Out of Stock' ?>
-                </p>
-              </div>
-            </div>
+            </div> 
 
             <div class="flex items-center">
               <span class="material-icons-outlined text-blue-700 mr-3">local_shipping</span>

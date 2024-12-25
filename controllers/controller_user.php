@@ -2,7 +2,7 @@
 include './models/model_user.php';
 include './models/model_role.php';
 
-class controllerUser {
+class ControllerUser {
     private $userModel;
     private $roleModel;
 
@@ -60,12 +60,13 @@ class controllerUser {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $user_name = $_POST['user_name'];
             $username = $_POST['username'];
-            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $password = $_POST['password'];
             $user_email = $_POST['user_email'];
             $user_phone = $_POST['user_phone'];
             $role_id = $_POST['role_id'];
-    
+
             $isAdded = $this->userModel->addUser($user_name, $username, $password, $user_email, $user_phone, $role_id);
+
             if ($isAdded) {
                 header('Location: index.php?modul=user&fitur=list&message=User successfully added');
             } else {
@@ -73,8 +74,7 @@ class controllerUser {
             }
             exit;
         }
-        
-        include_once './models/model_role.php';
+
         $roles = $this->roleModel->getAllRoles();
         include './views/user_add.php';
     }
@@ -83,21 +83,21 @@ class controllerUser {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $user_name = $_POST['user_name'];
             $username = $_POST['username'];
-            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $password = $_POST['password'];
             $user_email = $_POST['user_email'];
             $user_phone = $_POST['user_phone'];
             $role_id = $_POST['role_id'];
-    
+
             $isUpdated = $this->userModel->updateUser($user_id, $user_name, $username, $password, $user_email, $user_phone, $role_id);
+
             if ($isUpdated) {
-                header('Location: index.php?modul=user&fitur=list&message=Role successfully updated');
+                header('Location: index.php?modul=user&fitur=list&message=User successfully updated');
             } else {
                 header('Location: index.php?modul=user&fitur=update&id=' . $user_id . '&error=Failed to update user');
             }
-            // header('Location: index.php?modul=user');
             exit;
         }
-    
+
         $user = $this->userModel->getUserById($user_id);
         $roles = $this->roleModel->getAllRoles();
         include './views/user_update.php';
@@ -108,9 +108,9 @@ class controllerUser {
             header('Location: index.php?modul=user&fitur=list&error=Invalid user ID');
             exit;
         }
-    
+
         $isDeleted = $this->userModel->deleteUser($user_id);
-    
+
         if ($isDeleted) {
             header('Location: index.php?modul=user&fitur=list&message=User successfully deleted');
         } else {

@@ -3,10 +3,10 @@
     <div class="flex flex-col items-center py-6">
         <h5 class="text-xl font-semibold mb-4 text-center">Warehouse Management System</h5>
         <img src="https://via.placeholder.com/80" alt="User" class="rounded-full mb-3">
-        <div class="flex items-center mb-6 space-x-2">
-            <p class="font-semibold">Username</p>
-            <span class="text-sm text-gray-300">| Role: Admin</span>
-        </div>
+        <!-- <div class="flex items-center mb-6 space-x-2">
+            <p class="font-semibold"><?php echo htmlspecialchars($_SESSION['username']); ?></p>
+            <span class="text-sm text-gray-300">| Role: <?php echo htmlspecialchars($_SESSION['role_id']); ?></span>
+        </div> -->
         <ul class="w-full">
             <li class="mb-2">
                 <a href="index.php?modul=dashboard" class="flex items-center py-2 px-4 hover:bg-gray-700">
@@ -63,7 +63,7 @@
                 </a>
             </li>
             <li class="mb-2">
-                <a href="#" class="flex items-center py-2 px-4 text-red-400 hover:bg-gray-700">
+                <a href="index.php?modul=user&fitur=logout" class="flex items-center py-2 px-4 text-red-400 hover:bg-gray-700">
                     <span class="material-icons-outlined">logout</span>
                     <span class="ml-2">Logout</span>
                 </a>

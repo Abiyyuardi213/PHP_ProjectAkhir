@@ -4,7 +4,7 @@ include './config/db_connect.php';
 abstract class AbstractUser {
     abstract public function getUsers();
     abstract public function getUserById($user_id);
-    abstract public function addUser($user_name, $username, $password, $user_email, $user_phone, $user_id);
+    abstract public function addUser($user_name, $username, $password, $user_email, $user_phone, $role_id);
     abstract public function deleteUser($user_id);
     abstract public function updateUser($user_id, $user_name, $username, $password, $user_email, $user_phone, $role_id);
 }
@@ -12,11 +12,11 @@ abstract class AbstractUser {
 class UserModel extends AbstractUser {
     public function getUsers() {
         global $conn;
-        $sql = "SELECT u.user_id, u.user_name, u.username, u.password, u.user_email, u.user_phone, r.role_id, r.role_name 
+        $sql = "SELECT u.user_id, u.user_name, u.username, u.user_email, u.user_phone, r.role_id, r.role_name
                 FROM tb_user u
                 LEFT JOIN tb_role r ON u.role_id = r.role_id";
         $result = $conn->query($sql);
-    
+
         $users = [];
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -28,7 +28,7 @@ class UserModel extends AbstractUser {
 
     public function getUserById($user_id) {
         global $conn;
-        $sql = "SELECT u.user_id, u.user_name, u.username, u.password, u.user_email, u.user_phone, r.role_id
+        $sql = "SELECT u.user_id, u.user_name, u.username, u.user_email, u.user_phone, r.role_id, r.role_name
                 FROM tb_user u
                 LEFT JOIN tb_role r ON u.role_id = r.role_id
                 WHERE u.user_id = ?";
@@ -78,7 +78,7 @@ class UserModel extends AbstractUser {
                     SET user_name = ?, username = ?, user_email = ?, user_phone = ?, role_id = ?
                     WHERE user_id = ?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssi", $user_name, $username, $user_email, $user_phone, $role_id, $user_id);
+            $stmt->bind_param("ssssii", $user_name, $username, $user_email, $user_phone, $role_id, $user_id);
         }
 
         return $stmt->execute();
@@ -95,7 +95,7 @@ class UserModel extends AbstractUser {
         $stmt->bind_param("s", $likeTerm);
         $stmt->execute();
         $result = $stmt->get_result();
-    
+
         $users = [];
         while ($row = $result->fetch_assoc()) {
             $users[] = $row;
@@ -127,9 +127,5 @@ class UserModel extends AbstractUser {
             $users[] = $row;
         }
         return $users;
-    }
-
-    public function getAllUsers() {
-        return $this->getUsers();
     }
 }

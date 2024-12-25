@@ -67,22 +67,22 @@
                     </button>
                     <!-- Dropdown Menu -->
                     <div id="sortMenu" class="hidden absolute mt-2 w-48 rounded-lg bg-white shadow-lg z-10">
-                        <a href="index.php?modul=inventory&fitur=sortByName&order=ASC" 
+                    <a href="index.php?modul=inventory&fitur=sort&criteria=name&order=ASC" 
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Sort by Name (ASC)
-                        </a>
-                        <a href="index.php?modul=inventory&fitur=sortByName&order=DESC" 
+                        Sort by Name (ASC)
+                    </a>
+                    <a href="index.php?modul=inventory&fitur=sort&criteria=name&order=DESC" 
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Sort by Name (DESC)
-                        </a>
-                        <a href="index.php?modul=inventory&fitur=sortById&order=ASC" 
+                        Sort by Name (DESC)
+                    </a>
+                    <a href="index.php?modul=inventory&fitur=sort&criteria=id&order=ASC" 
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Sort by ID (ASC)
-                        </a>
-                        <a href="index.php?modul=inventory&fitur=sortById&order=DESC" 
+                        Sort by ID (ASC)
+                    </a>
+                    <a href="index.php?modul=inventory&fitur=sort&criteria=id&order=DESC" 
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Sort by ID (DESC)
-                        </a>
+                        Sort by ID (DESC)
+                    </a>
                     </div>
                 </div>
 
@@ -102,7 +102,6 @@
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Inventory ID</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Inventory Name</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Supplier Name</th>
-                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Status</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Created At</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Action</th>
                         </tr>
@@ -119,13 +118,6 @@
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
                                         <?= htmlspecialchars($barang['supplier_name'] ?? 'N/A') ?>
-                                    </td>
-                                    <td class="py-2 px-4 border-b border-gray-200 text-center">
-                                        <?php if (!empty($barang['barang_status'])) : ?>
-                                            <span class="text-green-500 font-semibold">Available</span>
-                                        <?php else : ?>
-                                            <span class="text-red-500 font-semibold">Out of Stock</span>
-                                        <?php endif; ?>
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
                                     <?= !empty($barang['created_at']) ? htmlspecialchars(date('d M Y, H:i', strtotime($barang['created_at']))) : 'N/A' ?>
