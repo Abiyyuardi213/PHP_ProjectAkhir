@@ -46,7 +46,6 @@ class TransactionModel {
 
         $details = [];
         while ($row = $result->fetch_assoc()) {
-            // var_dump($row);
             $details[] = $row;
         }
         return $details;
@@ -82,7 +81,7 @@ class TransactionModel {
             $total_amount = 0;
     
             foreach ($items as $item) {
-                $barang_price = $this->getBarangPrice($item['id_barang']); // Ambil harga barang
+                $barang_price = $this->getBarangPrice($item['id_barang']);
                 if ($barang_price === null) {
                     throw new Exception("Harga barang tidak ditemukan untuk ID: " . $item['id_barang']);
                 }
@@ -111,8 +110,8 @@ class TransactionModel {
             return $transaksi_id;
         } catch (Exception $e) {
             $this->conn->rollback();
-            error_log("Error creating transaction: " . $e->getMessage()); // Simpan ke log server
-            throw new Exception("Error creating transaction: " . $e->getMessage()); // Berikan detail untuk debugging
+            error_log("Error creating transaction: " . $e->getMessage());
+            throw new Exception("Error creating transaction: " . $e->getMessage());
         }
     }
 

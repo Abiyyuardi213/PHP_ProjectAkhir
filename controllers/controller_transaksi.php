@@ -119,6 +119,12 @@ class ControllerTransaksi {
         } else {
             $users = $this->userModel->getAllUsers();
             $barangs = $this->barangModel->getAllBarangs();
+
+            // Pastikan harga barang tidak null
+            foreach ($barangs as &$barang) {
+                $barang['barang_price'] = $barang['barang_price'] ?? 0; // Default ke 0 jika null
+            }
+            
             include './views/transaksi_add.php';
         }
     }

@@ -45,8 +45,11 @@
                             <option value="" disabled selected>Select an item</option>
                             <?php if (!empty($barangs)): ?>
                                 <?php foreach ($barangs as $barang): ?>
-                                    <option value="<?= htmlspecialchars($barang['barang_id']) ?>" data-name="<?= htmlspecialchars($barang['barang_name']) ?>" data-price="<?= htmlspecialchars($barang['barang_price']) ?>">
-                                        <?= htmlspecialchars($barang['barang_name']) ?> - Rp <?= number_format($barang['barang_price'], 0, ',', '.') ?>
+                                    <option value="<?= htmlspecialchars($barang['barang_id'] ?? '') ?>" 
+                                            data-name="<?= htmlspecialchars($barang['barang_name'] ?? '') ?>" 
+                                            data-price="<?= htmlspecialchars($barang['barang_price'] ?? '0') ?>">
+                                        <?= htmlspecialchars($barang['barang_name'] ?? '') ?> - 
+                                        Rp <?= isset($barang['barang_price']) ? number_format($barang['barang_price'], 0, ',', '.') : '0' ?>
                                     </option>
                                 <?php endforeach; ?>
                             <?php else: ?>

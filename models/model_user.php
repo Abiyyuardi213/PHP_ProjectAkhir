@@ -128,4 +128,8 @@ class UserModel extends AbstractUser {
         }
         return $users;
     }
+
+    public function getAllUsers() {
+        return $this->getUsers();
+    }
 }
