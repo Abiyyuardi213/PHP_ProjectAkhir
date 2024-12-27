@@ -151,7 +151,14 @@ class ModelBarang {
     }
 
     public function getAllBarangs() {
-        return $this->getBarangs();
+        $sql = "SELECT barang_id, barang_name, barang_price FROM tb_inventory";
+        $result = $this->conn->query($sql);
+    
+        $barangs = [];
+        while ($row = $result->fetch_assoc()) {
+            $barangs[] = $row;
+        }
+        return $barangs;
     }
 
     public function sortInventoryByName($order = 'ASC') {

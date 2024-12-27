@@ -14,16 +14,54 @@
 
     <!-- Main Content -->
     <div class="ml-64 flex flex-col flex-grow">
-        <!-- Navbar -->
-        <?php include 'includes/navbar.php'; ?>
+        <!-- Header -->
+        <header class="bg-blue-700 text-white py-4 px-6 shadow-md">
+            <h1 class="text-2xl font-bold flex items-center">
+                <span class="material-icons-outlined mr-2">shopping_cart</span>
+                Management Transactions
+            </h1>
+        </header>
 
         <!-- Content -->
-        <div class="p-6 flex-1 mt-16">
-            <h1 class="text-3xl font-semibold text-gray-900 mb-8">Manage Transactions</h1>
+        <div class="mt-4 p-6 flex-1 mt-16">
+            <!-- Display Success or Error Message -->
+            <?php if (isset($_GET['message'])) : ?>
+                <div id="notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-4 transform transition duration-500 ease-in-out translate-x-full" style="z-index: 9999;">
+                    <span class="material-icons-outlined text-xl">check_circle</span>
+                    <span><?= htmlspecialchars($_GET['message']) ?></span>
+                    <button onclick="document.getElementById('notification').style.display='none'" class="ml-4 text-white hover:text-gray-200">
+                        <span class="material-icons-outlined">close</span>
+                    </but>
+                </div>
+            <?php elseif (isset($_GET['error'])) : ?>
+                <div id="notification" class="fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-4 transform transition duration-500 ease-in-out translate-x-full" style="z-index: 9999;">
+                    <span class="material-icons-outlined text-xl">error</span>
+                    <span><?= htmlspecialchars($_GET['error']) ?></span>
+                    <button onclick="document.getElementById('notification').style.display='none'" class="ml-4 text-white hover:text-gray-200">
+                        <span class="material-icons-outlined">close</span>
+                    </button>
+                </div>
+            <?php endif; ?>
 
-            <div class="flex justify-end mb-4">
+            <!-- Form Pencarian -->
+            <form action="index.php" method="get" class="flex items-center bg-white shadow-lg rounded-full overflow-hidden mb-6 w-full max-w-lg mx-auto">
+                <input type="hidden" name="modul" value="inventory">
+                <input type="hidden" name="fitur" value="list">
+                <div class="flex items-center px-4">
+                    <span class="material-icons-outlined text-gray-400">search</span>
+                </div>
+                <input type="text" name="search" placeholder="Search Transactions..." value="<?= htmlspecialchars($searchTerm ?? '') ?>"
+                    class="flex-grow py-2 px-4 border-0 focus:ring-0 focus:outline-none text-gray-700 placeholder-gray-400">
+                <button type="submit" class="bg-blue-500 px-4 py-2 text-white rounded-full hover:bg-blue-600 transition duration-300 ease-in-out">
+                    Search
+                </button>
+            </form>
+
+            <!-- Tombol Add Inventory -->
+            <div class="flex justify-between items-center mb-6">
                 <a href="index.php?modul=transactions&fitur=create" 
-                class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 shadow-lg transition duration-300">
+                   class="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3 rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition"
+                   aria-label="Add Inventory">
                     <span class="material-icons-outlined mr-2">add</span>
                     Add Transaction
                 </a>
@@ -56,7 +94,6 @@
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
                                         <?php
-                                            // Ubah nilai transaksi_status menjadi teks
                                             $statusText = $transaction['transaksi_status'] == 1 ? 'Success' : 'Pending';
                                         ?>
                                         <span class="px-2 py-1 rounded-full text-sm <?= $transaction['transaksi_status'] == 1 ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800' ?>">
@@ -77,7 +114,7 @@
                         <?php else : ?>
                             <tr>
                                 <td colspan="6" class="py-4 px-4 text-center text-gray-500">
-                                    No transa ctions available.
+                                    No transactions available.
                                 </td>
                             </tr>
                         <?php endif; ?>

@@ -59,33 +59,6 @@
 
             <!-- Tombol Add Inventory -->
             <div class="flex justify-between items-center mb-6">
-                <!-- Dropdown Sort -->
-                <div class="relative inline-block text-left">
-                    <button id="sortButton" class="flex items-center bg-gradient-to-r from-gray-200 to-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow hover:from-gray-300 hover:to-gray-400 transition">
-                        <span class="material-icons-outlined mr-2">sort</span>
-                        <span>Sort</span>
-                    </button>
-                    <!-- Dropdown Menu -->
-                    <div id="sortMenu" class="hidden absolute mt-2 w-48 rounded-lg bg-white shadow-lg z-10">
-                    <a href="index.php?modul=inventory&fitur=sort&criteria=name&order=ASC" 
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        Sort by Name (ASC)
-                    </a>
-                    <a href="index.php?modul=inventory&fitur=sort&criteria=name&order=DESC" 
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        Sort by Name (DESC)
-                    </a>
-                    <a href="index.php?modul=inventory&fitur=sort&criteria=id&order=ASC" 
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        Sort by ID (ASC)
-                    </a>
-                    <a href="index.php?modul=inventory&fitur=sort&criteria=id&order=DESC" 
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        Sort by ID (DESC)
-                    </a>
-                    </div>
-                </div>
-
                 <a href="index.php?modul=inventory&fitur=create" 
                    class="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3 rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition"
                    aria-label="Add Inventory">
@@ -170,19 +143,6 @@
         notification.style.display = 'none';
       }
     }, 3000);
-
-    document.getElementById('sortButton').addEventListener('click', function() {
-        const menu = document.getElementById('sortMenu');
-        menu.classList.toggle('hidden');
-    });
-
-    window.addEventListener('click', function(e) {
-        const menu = document.getElementById('sortMenu');
-        const button = document.getElementById('sortButton');
-        if (!button.contains(e.target) && !menu.contains(e.target)) {
-            menu.classList.add('hidden');
-        }
-    });
   </script>
 </body>
 </html>
