@@ -97,6 +97,7 @@
                     <table class="min-w-full border-collapse border border-gray-200">
                         <thead class="bg-blue-700">
                             <tr>
+                                <th class="py-3 px-4 text-center text-white text-sm font-semibold">Profile Picture</th>
                                 <th class="py-3 px-4 text-center text-white text-sm font-semibold">User ID</th>
                                 <th class="py-3 px-4 text-center text-white text-sm font-semibold">User Name</th>
                                 <th class="py-3 px-4 text-center text-white text-sm font-semibold">Username</th>
@@ -110,6 +111,30 @@
                             <?php if (!empty($users)) : ?>
                                 <?php foreach ($users as $user) : ?>
                                     <tr class="even:bg-gray-50 hover:bg-blue-100">
+                                        <!-- Kolom Gambar Profil -->
+                                        <td class="py-3 px-4 border-b border-gray-200 text-center">
+                                            <?php if (!empty($user['profile_picture'])): ?>
+                                                <!-- Link untuk melihat gambar profil -->
+                                                <a href="index.php?modul=user&fitur=viewProfilePicture&id=<?= $user['user_id'] ?>"
+                                                target="_blank"
+                                                class="inline-flex items-center px-2 py-1 text-sm text-blue-500 bg-blue-100 rounded hover:bg-blue-200 transition">
+                                                    <span class="material-icons-outlined mr-1">visibility</span>
+                                                    View
+                                                </a>
+                                            <?php else: ?>
+                                                <img id="profilePicturePreview-<?= htmlspecialchars($user['user_id']) ?>"
+                                                    src="uploads/profile_pictures/default.jpg"
+                                                    alt="Profile Picture"
+                                                    class="w-12 h-12 rounded-full object-cover mx-auto">
+                                                <!-- Link untuk melihat gambar profil, jika belum ada gambar -->
+                                                <a href="javascript:void(0)"
+                                                onclick="openModal('uploads/profile_pictures/default.jpg')"
+                                                class="inline-flex items-center px-2 py-1 text-sm text-blue-500 bg-blue-100 rounded hover:bg-blue-200 transition">
+                                                    <span class="material-icons-outlined mr-1">visibility</span>
+                                                    View
+                                                </a>
+                                            <?php endif; ?>
+                                        </td>
                                         <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700"><?= htmlspecialchars($user['user_id']) ?></td>
                                         <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700"><?= htmlspecialchars($user['user_name']) ?></td>
                                         <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700"><?= htmlspecialchars($user['username']) ?></td>
@@ -117,11 +142,11 @@
                                         <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700"><?= htmlspecialchars($user['user_phone']) ?></td>
                                         <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700"><?= htmlspecialchars($user['role_name'] ?? '-') ?></td>
                                         <td class="py-3 px-4 border-b border-gray-200 text-center text-gray-700">
-                                            <a href="index.php?modul=user&fitur=update&id=<?= $user['user_id'] ?>" 
+                                            <a href="index.php?modul=user&fitur=update&id=<?= $user['user_id'] ?>"
                                             class="inline-flex items-center px-2 py-1 text-sm text-yellow-500 bg-yellow-100 rounded hover:bg-yellow-200 transition">
                                                 <span class="material-icons-outlined mr-1">edit</span>
                                             </a>
-                                            <a href="index.php?modul=user&fitur=delete&id=<?= $user['user_id'] ?>" 
+                                            <a href="index.php?modul=user&fitur=delete&id=<?= $user['user_id'] ?>"
                                             class="inline-flex items-center px-2 py-1 text-sm text-red-500 bg-red-100 rounded hover:bg-red-200 transition ml-2"
                                             onclick="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')">
                                                 <span class="material-icons-outlined mr-1">delete</span>
@@ -144,6 +169,13 @@
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="profileModal" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white p-4 rounded-lg">
+            <img id="modalImage" src="" alt="Profile Picture" class="w-full max-w-lg rounded-lg">
+            <button onclick="closeModal()" class="mt-4 px-4 py-2 text-white bg-red-500 rounded-lg">Close</button>
         </div>
     </div>
     <script>
@@ -174,6 +206,29 @@
                 menu.classList.add('hidden');
             }
         });
+
+        function updateProfilePicturePreview(event, userId) {
+            const fileInput = event.target;
+            const file = fileInput.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewImg = document.getElementById(`profilePicturePreview-${userId}`);
+                    previewImg.src = e.target.result;  // Update gambar preview dengan gambar yang dipilih
+                };
+                reader.readAsDataURL(file);  // Membaca file gambar sebagai data URL
+            }
+        }
+
+        function openModal(imageSrc) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('profileModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('profileModal').classList.add('hidden');
+        }
     </script>
 </body>
 </html>
