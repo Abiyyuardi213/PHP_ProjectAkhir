@@ -51,6 +51,7 @@ $transactionCount = count($transactions);
                 <!-- Info Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     <!-- Card: Total Roles -->
+                    <?php if ($_SESSION['role_name'] !== 'Admin') { ?>
                     <div class="bg-blue-600 text-white p-6 rounded-none shadow-lg hover:scale-105 transform transition duration-300">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
@@ -65,6 +66,7 @@ $transactionCount = count($transactions);
                             </a>
                         </div>
                     </div>
+                    <?php } ?>
 
                     <!-- Card: Total Users -->
                     <div class="bg-green-700 text-white p-6 rounded-none shadow-lg hover:scale-105 transform transition duration-300">
@@ -115,5 +117,26 @@ $transactionCount = count($transactions);
             </main>
         </div>
     </div>
+
+    <?php if (isset($_SESSION['login_success'])) { ?>
+    <div id="loginSuccessModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-bold">Login Berhasil</h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <p class="text-gray-700">Selamat datang, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
+            <button onclick="closeModal()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">OK</button>
+        </div>
+    </div>
+    <script>
+        function closeModal() {
+            document.getElementById('loginSuccessModal').style.display = 'none';
+            <?php unset($_SESSION['login_success']); ?>
+        }
+    </script>
+    <?php } ?>
 </body>
 </html>

@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+if (isset($_SESSION['user_id'])) {
+    header("Location: index.php?modul=user&fitur=login");
+    exit();
+}
+
+$message = $_GET['error'] ?? "";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

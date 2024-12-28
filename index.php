@@ -1,13 +1,14 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
+$modul = $_GET['modul'] ?? 'dashboard';
+$fitur = $_GET['fitur'] ?? 'list';
+
+// Redirect to login if user is not authenticated and not already on the login page
+if (!isset($_SESSION['user_id']) && !($modul === 'user' && $fitur === 'login')) {
     header("Location: index.php?modul=user&fitur=login");
     exit();
 }
-
-$modul = $_GET['modul'] ?? 'dashboard';
-$fitur = $_GET['fitur'] ?? 'list';
 
 switch ($modul) {
     case 'dashboard':

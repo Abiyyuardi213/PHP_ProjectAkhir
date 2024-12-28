@@ -7,6 +7,7 @@ abstract class AbstractUser {
     abstract public function addUser($user_name, $username, $password, $user_email, $user_phone, $role_id);
     abstract public function deleteUser($user_id);
     abstract public function updateUser($user_id, $user_name, $username, $password, $user_email, $user_phone, $role_id);
+    abstract public function loginUser($username, $password);
 }
 
 class UserModel extends AbstractUser {
@@ -138,7 +139,10 @@ class UserModel extends AbstractUser {
     public function loginUser($username, $password) {
         global $conn;
     
-        $sql = "SELECT user_id, username, password, role_id, user_name FROM tb_user WHERE username = ?";
+        $sql = "SELECT u.user_id, u.username, u.password, u.role_id, u.user_name, u.profile_picture, r.role_name 
+                FROM tb_user u
+                LEFT JOIN tb_role r ON u.role_id = r.role_id
+                WHERE u.username = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();

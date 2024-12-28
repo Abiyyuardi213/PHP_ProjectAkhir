@@ -17,9 +17,6 @@ class ControllerUser {
         $order = $_GET['order'] ?? 'ASC';
 
         switch ($fitur) {
-            case 'login':
-                $this->loginUser();
-                break;
             case 'create':
                 $this->createUsers();
                 break;
@@ -49,6 +46,12 @@ class ControllerUser {
                 break;
             case 'sortById':
                 $this->sortUsers('id', $order);
+                break;
+            case 'login':
+                $this->loginUser();
+                break;
+            case 'logout':
+                $this->logoutUser();
                 break;
             default:
                 $this->listUsers();
@@ -217,28 +220,38 @@ class ControllerUser {
     }
 
     public function loginUser() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = $_POST['username'];
             $password = $_POST['password'];
     
-            // Verifikasi kredensial user
             $user = $this->userModel->loginUser($username, $password);
             
             if ($user) {
-                // Simpan informasi user dalam session
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['username'] = $user['username'];
-                $_SESSION['role_id'] = $user['role_id'];  // Menyimpan role_id, jika diperlukan
+                $_SESSION['role_id'] = $user['role_id'];
+                $_SESSION['role_name'] = $user['role_name']; // Store role name in session
+                $_SESSION['profile_picture'] = $user['profile_picture']; // Store profile picture in session
+                $_SESSION['login_success'] = true; // Set login success flag
     
-                // Redirect ke dashboard setelah login sukses
                 header("Location: index.php?modul=dashboard");
                 exit();
             } else {
-                // Jika login gagal, beri pesan kesalahan
                 header("Location: index.php?modul=user&fitur=login&error=Invalid credentials");
                 exit();
             }
         }
-        include './views/user/user_login.php';
+        include './login.php';
+    }
+
+    public function logoutUser() {
+        session_start();
+        session_destroy();
+        header("Location: index.php?modul=user&fitur=login");
+        exit();
     }
 }
