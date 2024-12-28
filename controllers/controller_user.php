@@ -17,6 +17,9 @@ class ControllerUser {
         $order = $_GET['order'] ?? 'ASC';
 
         switch ($fitur) {
+            case 'login':
+                $this->loginUser();
+                break;
             case 'create':
                 $this->createUsers();
                 break;
@@ -60,7 +63,7 @@ class ControllerUser {
         } else {
             $users = $this->userModel->getUsers();
         }
-        include './views/user_list.php';
+        include './views/user/user_list.php';
     }
 
     public function createUsers() {
@@ -110,7 +113,7 @@ class ControllerUser {
         }
 
         $roles = $this->roleModel->getAllRoles();
-        include './views/user_add.php';
+        include './views/user/user_add.php';
     }
 
     public function updateUsers($user_id) {
@@ -121,24 +124,26 @@ class ControllerUser {
             $user_email = $_POST['user_email'];
             $user_phone = $_POST['user_phone'];
             $role_id = $_POST['role_id'];
-
-            $profile_picture = null;
+    
+            $user = $this->userModel->getUserById($user_id);
+            $profile_picture = $user['profile_picture'];
+    
             if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
                 $fileTmpPath = $_FILES['profile_picture']['tmp_name'];
                 $fileName = time() . '_' . basename($_FILES['profile_picture']['name']);
                 $uploadDir = './uploads/profile_pictures/';
                 $destPath = $uploadDir . $fileName;
-
+    
                 if (!file_exists($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
-
+    
                 $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
                 $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-
+    
                 if (in_array($fileExtension, $allowedExtensions)) {
                     if (move_uploaded_file($fileTmpPath, $destPath)) {
-                        $profile_picture = $fileName;
+                        $profile_picture = $fileName; // Gunakan gambar baru
                     } else {
                         header('Location: index.php?modul=user&fitur=update&id=' . $user_id . '&error=Failed to upload profile picture');
                         exit();
@@ -148,41 +153,37 @@ class ControllerUser {
                     exit();
                 }
             }
-
+    
             $isUpdated = $this->userModel->updateUser($user_id, $user_name, $username, $password, $user_email, $user_phone, $role_id, $profile_picture);
-
+    
             if ($isUpdated) {
                 header('Location: index.php?modul=user&fitur=list&message=User successfully updated');
             } else {
                 header('Location: index.php?modul=user&fitur=update&id=' . $user_id . '&error=Failed to update user');
             }
-            exit;
+            exit();
         }
-
+    
         $user = $this->userModel->getUserById($user_id);
         $roles = $this->roleModel->getAllRoles();
-        include './views/user_update.php';
+        include './views/user/user_update.php';
     }
 
     public function viewProfilePicture($user_id) {
-        // Ambil data user berdasarkan user_id
         $user = $this->userModel->getUserById($user_id);
     
         if ($user && isset($user['profile_picture']) && !empty($user['profile_picture'])) {
             $profile_picture_path = './uploads/profile_pictures/' . $user['profile_picture'];
     
             if (file_exists($profile_picture_path)) {
-                // Jika gambar ada, tampilkan gambar profile
-                header('Content-Type: image/jpeg');  // Tentukan jenis konten sesuai format gambar
+                header('Content-Type: image/jpeg');
                 readfile($profile_picture_path);
                 exit();
             } else {
-                // Jika file tidak ditemukan
                 header('Location: index.php?modul=user&fitur=list&error=Profile picture not found');
                 exit();
             }
         } else {
-            // Jika user atau profile picture tidak ada
             header('Location: index.php?modul=user&fitur=list&error=User or profile picture not found');
             exit();
         }
@@ -212,6 +213,32 @@ class ControllerUser {
         } else {
             $users = $this->userModel->getUsers();
         }
-        include './views/user_list.php';
+        include './views/user/user_list.php';
+    }
+
+    public function loginUser() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+    
+            // Verifikasi kredensial user
+            $user = $this->userModel->loginUser($username, $password);
+            
+            if ($user) {
+                // Simpan informasi user dalam session
+                $_SESSION['user_id'] = $user['user_id'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['role_id'] = $user['role_id'];  // Menyimpan role_id, jika diperlukan
+    
+                // Redirect ke dashboard setelah login sukses
+                header("Location: index.php?modul=dashboard");
+                exit();
+            } else {
+                // Jika login gagal, beri pesan kesalahan
+                header("Location: index.php?modul=user&fitur=login&error=Invalid credentials");
+                exit();
+            }
+        }
+        include './views/user/user_login.php';
     }
 }

@@ -33,7 +33,7 @@ $roles = $this->roleModel->getAllRoles();
             </div>
         <?php endif; ?>
 
-        <form action="index.php?modul=user&fitur=update&id=<?= $user_id ?>" method="POST" enctype="multipart/form-data">
+        <form action="index.php?modul=user&fitur=update&id=<?= $user_id ?>" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Kiri -->
             <div class="space-y-6">
                 <!-- Nama Pengguna -->

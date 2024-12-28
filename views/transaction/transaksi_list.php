@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventory List</title>
+  <title>Transaction List</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
   <div class="flex h-screen">
     <!-- Sidebar -->
-    <?php include 'includes/sidebar.php'; ?>
+    <?php include './views/includes/sidebar.php'; ?>
 
     <!-- Main Content -->
     <div class="ml-64 flex flex-col flex-grow">
         <!-- Header -->
         <header class="bg-blue-700 text-white py-4 px-6 shadow-md">
             <h1 class="text-2xl font-bold flex items-center">
-                <span class="material-icons-outlined mr-2">inventory</span>
-                Management Inventory
+                <span class="material-icons-outlined mr-2">shopping_cart</span>
+                Management Transactions
             </h1>
         </header>
 
@@ -50,7 +50,7 @@
                 <div class="flex items-center px-4">
                     <span class="material-icons-outlined text-gray-400">search</span>
                 </div>
-                <input type="text" name="search" placeholder="Search inventory..." value="<?= htmlspecialchars($searchTerm ?? '') ?>"
+                <input type="text" name="search" placeholder="Search Transactions..." value="<?= htmlspecialchars($searchTerm ?? '') ?>"
                     class="flex-grow py-2 px-4 border-0 focus:ring-0 focus:outline-none text-gray-700 placeholder-gray-400">
                 <button type="submit" class="bg-blue-500 px-4 py-2 text-white rounded-full hover:bg-blue-600 transition duration-300 ease-in-out">
                     Search
@@ -59,58 +59,54 @@
 
             <!-- Tombol Add Inventory -->
             <div class="flex justify-between items-center mb-6">
-                <a href="index.php?modul=inventory&fitur=create" 
+                <a href="index.php?modul=transactions&fitur=create" 
                    class="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3 rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition"
                    aria-label="Add Inventory">
                     <span class="material-icons-outlined mr-2">add</span>
-                    Add Inventory
+                    Add Transaction
                 </a>
             </div>
 
-            <!-- Tabel Inventory -->
             <div class="bg-white shadow-md rounded-lg overflow-hidden overflow-x-auto">
                 <table class="min-w-full border-collapse border border-gray-200">
                     <thead class="bg-blue-700">
                         <tr>
-                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Inventory ID</th>
-                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Inventory Name</th>
-                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Supplier Name</th>
-                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Created At</th>
+                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Transaction ID</th>
+                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">User</th>
+                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Total Amount</th>
+                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Status</th>
+                            <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Date</th>
                             <th class="py-2 px-4 border-b border-gray-200 text-center text-white font-semibold">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (!empty($barangs)) : ?>
-                            <?php foreach ($barangs as $barang) : ?>
+                        <?php if (!empty($transactions)) : ?>
+                            <?php foreach ($transactions as $transaction) : ?>
                                 <tr class="even:bg-gray-50 hover:bg-blue-100">
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
-                                        <?= htmlspecialchars($barang['barang_id'] ?? 'N/A') ?>
+                                        <?= htmlspecialchars($transaction['transaksi_id'] ?? 'N/A') ?>
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
-                                        <?= htmlspecialchars($barang['barang_name'] ?? 'N/A') ?>
+                                        <?= htmlspecialchars($transaction['user_name'] ?? 'Unknown User') ?>
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
-                                        <?= htmlspecialchars($barang['supplier_name'] ?? 'N/A') ?>
+                                        Rp <?= number_format($transaction['total_amount'] ?? 0, 0, ',', '.') ?>
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
-                                    <?= !empty($barang['created_at']) ? htmlspecialchars(date('d M Y, H:i', strtotime($barang['created_at']))) : 'N/A' ?>
+                                        <?php
+                                            $statusText = $transaction['transaksi_status'] == 1 ? 'Success' : 'Pending';
+                                        ?>
+                                        <span class="px-2 py-1 rounded-full text-sm <?= $transaction['transaksi_status'] == 1 ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800' ?>">
+                                            <?= htmlspecialchars($statusText) ?>
+                                        </span>
+                                    </td>
+                                    <td class="py-2 px-4 border-b border-gray-200 text-center text-gray-800">
+                                        <?= htmlspecialchars($transaction['transaksi_date'] ?? 'N/A') ?>
                                     </td>
                                     <td class="py-2 px-4 border-b border-gray-200 text-center">
-                                        <a href="index.php?modul=inventory&fitur=detail&id=<?= htmlspecialchars($barang['barang_id'] ?? '') ?>" 
-                                            class="inline-flex items-center px-2 py-1 text-sm text-blue-500 bg-blue-100 rounded hover:bg-blue-200 transition"
-                                            aria-label="Show Details">
-                                            <span class="material-icons-outlined mr-1">visibility</span> Details
-                                        </a>
-                                        <a href="index.php?modul=inventory&fitur=update&id=<?= htmlspecialchars($barang['barang_id'] ?? '') ?>" 
-                                           class="inline-flex items-center px-2 py-1 text-sm text-yellow-500 bg-yellow-100 rounded hover:bg-yellow-200 transition ml-2"
-                                           aria-label="Edit Inventory">
-                                            <span class="material-icons-outlined mr-1">edit</span>
-                                        </a>
-                                        <a href="index.php?modul=inventory&fitur=delete&id=<?= htmlspecialchars($barang['barang_id'] ?? '') ?>" 
-                                           class="inline-flex items-center px-2 py-1 text-sm text-red-500 bg-red-100 rounded hover:bg-red-200 transition ml-2"
-                                           onclick="return confirm('Are you sure you want to delete this inventory?')"
-                                           aria-label="Delete Inventory">
-                                            <span class="material-icons-outlined mr-1">delete</span>
+                                        <a href="index.php?modul=transactions&fitur=detail&id=<?= htmlspecialchars($transaction['transaksi_id']) ?>" 
+                                        class="inline-flex items-center px-2 py-1 text-sm text-blue-500 bg-blue-100 rounded hover:bg-blue-200 transition">
+                                            <span class="material-icons-outlined mr-1">visibility</span>
                                         </a>
                                     </td>
                                 </tr>
@@ -118,7 +114,7 @@
                         <?php else : ?>
                             <tr>
                                 <td colspan="6" class="py-4 px-4 text-center text-gray-500">
-                                    No Inventory available.
+                                    No transactions available.
                                 </td>
                             </tr>
                         <?php endif; ?>
@@ -128,21 +124,5 @@
         </div>
     </div>
   </div>
-  <script>
-    setTimeout(() => {
-        const notification = document.getElementById('notification');
-        if (notification) {
-            notification.classList.remove('translate-x-full');
-            notification.classList.add('translate-x-0');
-        }
-    }, 10);
-
-    setTimeout(() => {
-      const notification = document.getElementById('notification');
-      if (notification) {
-        notification.style.display = 'none';
-      }
-    }, 3000);
-  </script>
 </body>
 </html>

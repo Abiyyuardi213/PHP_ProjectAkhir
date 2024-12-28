@@ -52,7 +52,7 @@ class ControllerTransaksi {
             ];
         }, $transactions);
 
-        include './views/transaksi_list.php';
+        include './views/transaction/transaksi_list.php';
     }
 
     public function viewDetails($transaksi_id) {
@@ -62,7 +62,7 @@ class ControllerTransaksi {
             echo "Data transaksi tidak ditemukan.";
             return;
         }
-        include './views/transaksi_detail.php';
+        include './views/transaction/transaksi_detail.php';
     }
 
     public function createTransaksi() {
@@ -125,7 +125,7 @@ class ControllerTransaksi {
                 $barang['barang_price'] = $barang['barang_price'] ?? 0; // Default ke 0 jika null
             }
             
-            include './views/transaksi_add.php';
+            include './views/transaction/transaksi_add.php';
         }
     }
 }

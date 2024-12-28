@@ -3,21 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
+  <title>Management Supplier</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
   <div class="flex h-screen">
     <!-- Sidebar -->
-    <?php include 'includes/sidebar.php'; ?>
+    <?php include './views/includes/sidebar.php'; ?>
 
     <!-- Main Content -->
     <div class="ml-64 flex flex-col flex-grow">
+        <!-- Header -->
+        <header class="bg-blue-700 text-white py-4 px-6 shadow-md">
+            <h1 class="text-2xl font-bold flex items-center">
+                <span class="material-icons-outlined mr-2">local_shipping</span>
+                Management Supplier
+            </h1>
+        </header>
         <!-- Content -->
         <div class="mt-4 p-6 flex-1 mt-16">
-            <h1 class="text-3xl font-semibold text-gray-900 mb-8">Manage Supplier</h1>
-
             <?php if (isset($_GET['message'])) : ?>
                 <div id="notification" class="flex items-center bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mb-4 shadow-lg">
                     <span class="material-icons-outlined mr-2">check_circle</span>

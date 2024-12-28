@@ -50,12 +50,12 @@
                     <span class="ml-2">Manage Supplier</span>
                 </a>
             </li>
-            <li class="mb-2">
+            <!-- <li class="mb-2">
                 <a href="#" class="flex items-center py-2 px-4 hover:bg-gray-700">
                     <span class="material-icons-outlined">settings</span>
                     <span class="ml-2">Settings</span>
                 </a>
-            </li>
+            </li> -->
             <li class="mb-2">
                 <a href="#" class="flex items-center py-2 px-4 hover:bg-gray-700">
                     <span class="material-icons-outlined">person</span>

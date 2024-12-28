@@ -44,7 +44,7 @@ class ControllerCustomer {
 
     public function listCustomers() {
         $customers = $this->model->getAllCustomers();
-        include './views/customer_list.php';
+        include './views/customer/customer_list.php';
     }
 
     public function createCustomer() {
@@ -68,7 +68,7 @@ class ControllerCustomer {
                 }
             }
         }
-        include './views/customer_add.php';
+        include './views/customer/customer_add.php';
     }
 
     public function updateCustomer($customer_id) {
@@ -91,7 +91,7 @@ class ControllerCustomer {
             echo "<div class='error'>Customer not found.</div>";
             $this->redirectToList();
         }
-        include './views/customer_update.php';
+        include './views/customer/customer_update.php';
     }
 
     public function deleteCustomer($customer_id) {

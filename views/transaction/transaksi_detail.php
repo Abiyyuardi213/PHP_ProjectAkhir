@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
   <script>
-    // Function to print the content
     function printReceipt() {
       const printContent = document.getElementById("printArea").innerHTML;
       const originalContent = document.body.innerHTML;
@@ -20,7 +19,7 @@
 <body class="bg-gray-100">
   <div class="flex h-screen">
     <!-- Sidebar -->
-    <?php include 'includes/sidebar.php'; ?>
+    <?php include './views/includes/sidebar.php'; ?>
 
     <!-- Main Content -->
     <div class="ml-64 flex flex-col flex-grow">

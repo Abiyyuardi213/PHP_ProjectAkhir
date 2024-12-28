@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-// if (!isset($_SESSION['user_id'])) {
-//     header("Location: login.php");
-//     exit();
-// }
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php?modul=user&fitur=login");
+    exit();
+}
 
 $modul = $_GET['modul'] ?? 'dashboard';
 $fitur = $_GET['fitur'] ?? 'list';
@@ -52,6 +52,6 @@ switch ($modul) {
 
     default:
         echo "<h1>404 - Modul Tidak Ditemukan</h1>";
-        include 'views/dashboard.php';
+        include 'views/dashboard_home.php';
         break;
 }

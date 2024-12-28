@@ -50,7 +50,7 @@ class controllerRole {
         } else {
             $roles = $this->model->getRoles();
         }
-        include './views/role_list.php';
+        include './views/role/role_list.php';
     }
 
     public function createRole() {
@@ -69,7 +69,7 @@ class controllerRole {
             }
             exit;
         } else {
-            include './views/role_add.php';
+            include './views/role/role_add.php';
         }
     }
 
@@ -94,7 +94,7 @@ class controllerRole {
                 header('Location: index.php?modul=role&fitur=list&error=Role not found');
                 exit;
             }
-            include './views/role_update.php';
+            include './views/role/role_update.php';
         }
     }
 
@@ -118,6 +118,6 @@ class controllerRole {
         } else {
             $roles = $this->model->getRoles();
         }
-        include './views/role_list.php';
+        include './views/role/role_list.php';
     }
 }

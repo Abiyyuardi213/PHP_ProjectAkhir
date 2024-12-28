@@ -70,7 +70,7 @@ class ControllerBarang {
         } else {
             $barangs = $this->modelBarang->getBarangs();
         }
-        include './views/inventory_list.php';
+        include './views/inventory/inventory_list.php';
     }
 
     public function viewDetailInventory($barang_id) {
@@ -79,7 +79,7 @@ class ControllerBarang {
             echo "Inventory data not found.";
             return;
         }
-        include './views/inventory_detail.php';
+        include './views/inventory/inventory_detail.php';
     }
 
     public function createBarang() {
@@ -115,7 +115,6 @@ class ControllerBarang {
                 ];
             }
     
-            // Tambahkan barang menggunakan metode batch
             try {
                 $this->modelBarang->addMultipleBarangs($validBarangs);
                 $this->redirectToListWithMessage('Barang berhasil ditambahkan.');
@@ -125,7 +124,7 @@ class ControllerBarang {
         }
     
         $suppliers = $this->modelSupplier->getAllSuppliers();
-        include './views/inventory_add.php';
+        include './views/inventory/inventory_add.php';
     }
 
     public function updateBarang($barang_id) {
@@ -159,7 +158,7 @@ class ControllerBarang {
 
         $suppliers = $this->modelSupplier->getAllSuppliers();
 
-        include './views/inventory_update.php';
+        include './views/inventory/inventory_update.php';
     }
 
     public function deleteBarang($barang_id) {

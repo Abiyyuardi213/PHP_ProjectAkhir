@@ -48,7 +48,7 @@ class ControllerSupplier {
         } else {
             $suppliers = $this->modelSupplier->getSuppliers();
         }
-        include './views/supplier_list.php';
+        include './views/supplier/supplier_list.php';
     }
 
     public function createSupplier() {
@@ -69,7 +69,7 @@ class ControllerSupplier {
                 echo "Error: All fields are required.";
             }
         } else {
-            include 'views/supplier_add.php';
+            include 'views/supplier/supplier_add.php';
         }
     }
 
@@ -92,7 +92,7 @@ class ControllerSupplier {
             }
         } else {
             $supplier = $this->modelSupplier->getSupplierById($supplier_id);
-            include 'views/supplier_update.php';
+            include 'views/supplier/supplier_update.php';
         }
     }
 
