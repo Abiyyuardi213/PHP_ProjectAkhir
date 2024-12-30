@@ -1,14 +1,11 @@
 <?php
-// session_start();
 
 if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
 }
-
 $message = $_GET['error'] ?? "";
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,6 +54,26 @@ $message = $_GET['error'] ?? "";
             </button>
         </form>
     </div>
+    <?php if (isset($_SESSION['logout_success'])) { ?>
+        <div id="logoutSuccessModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold">Logout Berhasil</h2>
+                    <button onclick="closeLogoutModal()" class="text-gray-500 hover:text-gray-700">
+                        <span class="material-icons-outlined">close</span>
+                    </button>
+                </div>
+                <p class="text-gray-700">Anda telah berhasil logout.</p>
+                <button onclick="closeLogoutModal()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">OK</button>
+            </div>
+        </div>
+        <script>
+            function closeLogoutModal() {
+                document.getElementById('logoutSuccessModal').style.display = 'none';
+                <?php unset($_SESSION['logout_success']); ?>
+            }
+        </script>
+    <?php } ?>
     <script>
         function togglePasswordVisibility() {
             const passwordField = document.getElementById("password");

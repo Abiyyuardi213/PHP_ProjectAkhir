@@ -7,6 +7,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
+<?php
+// ...existing code...
+?>
 <body class="bg-gray-100 text-gray-800 font-sans">
 
   <!-- Wrapper -->
@@ -26,7 +29,7 @@
           <a href="#contact" class="hover:underline">Contact</a>
         </nav>
         <!-- Login Button -->
-        <a href="./views/role_option.php" class="bg-white text-green-700 px-4 py-2 rounded-full hover:bg-gray-100 shadow-md">
+        <a href="./role_option.php" class="bg-white text-green-700 px-4 py-2 rounded-full hover:bg-gray-100 shadow-md">
           Login
         </a>
       </div>
@@ -35,9 +38,9 @@
     <!-- Hero Section -->
     <section class="bg-gradient-to-r from-green-600 to-green-400 py-12">
       <div class="container mx-auto px-6 text-center">
-        <h2 class="text-4xl sm:text-5xl font-bold text-white mb-6">Welcome to Warehouse Management</h2>
+        <h2 class="text-4xl sm:text-5xl font-bold text-white mb-6"><?php echo $welcomeMessage; ?></h2>
         <p class="text-gray-200 text-lg sm:text-xl mb-8">Efficiently manage your orders, track deliveries, and streamline operations with our powerful platform.</p>
-        <a href="login.php" class="bg-white text-green-600 px-6 py-3 rounded-full hover:bg-gray-100 shadow-md">
+        <a href="./role_option.php" class="bg-white text-green-600 px-6 py-3 rounded-full hover:bg-gray-100 shadow-md">
           Get Started
         </a>
       </div>
@@ -48,24 +51,14 @@
       <div class="container mx-auto px-6">
         <h2 class="text-3xl font-bold text-gray-800 text-center mb-10">Features</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <?php foreach ($features as $feature): ?>
           <!-- Feature Card -->
           <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl">
-            <span class="material-icons text-green-500 text-5xl mb-4">analytics</span>
-            <h3 class="text-lg font-semibold text-gray-800 mb-2">Order Management</h3>
-            <p class="text-gray-600">Easily track, manage, and update your orders in real-time.</p>
+            <span class="material-icons text-<?php echo $feature['color']; ?> text-5xl mb-4"><?php echo $feature['icon']; ?></span>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2"><?php echo $feature['title']; ?></h3>
+            <p class="text-gray-600"><?php echo $feature['description']; ?></p>
           </div>
-          <!-- Feature Card -->
-          <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl">
-            <span class="material-icons text-yellow-500 text-5xl mb-4">inventory</span>
-            <h3 class="text-lg font-semibold text-gray-800 mb-2">Product Catalog</h3>
-            <p class="text-gray-600">Browse available products and manage inventory effortlessly.</p>
-          </div>
-          <!-- Feature Card -->
-          <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl">
-            <span class="material-icons text-blue-500 text-5xl mb-4">support</span>
-            <h3 class="text-lg font-semibold text-gray-800 mb-2">Customer Support</h3>
-            <p class="text-gray-600">Receive 24/7 support for your inquiries and concerns.</p>
-          </div>
+          <?php endforeach; ?>
         </div>
       </div>
     </section>

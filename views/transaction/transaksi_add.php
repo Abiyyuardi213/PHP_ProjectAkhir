@@ -1,3 +1,16 @@
+<?php
+// session_start();
+
+// Pastikan variabel sesi tersedia
+$user_id = $_SESSION['user_id'] ?? null;
+$username = $_SESSION['username'] ?? null;
+
+// Tangani jika sesi tidak ada
+if ($user_id === null || $username === null) {
+    echo "User information is missing. Please login again.";
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,18 +43,9 @@
                         <!-- User Selection -->
                         <div class="mb-4">
                             <label for="user_id" class="block text-gray-700 font-semibold mb-2">User</label>
-                            <select id="user_id" name="user_id" class="block w-full border border-gray-300 rounded-md px-3 py-2" required>
-                                <option value="" disabled selected>Select a user</option>
-                                <?php if (!empty($users)): ?>
-                                    <?php foreach ($users as $user): ?>
-                                        <option value="<?= htmlspecialchars($user['user_id']) ?>">
-                                            <?= htmlspecialchars($user['username']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <option value="" disabled>No users available</option>
-                                <?php endif; ?>
-                            </select>
+                            <input type="hidden" id="user_id" name="user_id" value="<?= htmlspecialchars($user_id) ?>">
+                            <input type="text" class="block w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-200" 
+                                value="<?= htmlspecialchars($username) ?>" readonly>
                         </div>
 
                         <!-- Item Selection -->

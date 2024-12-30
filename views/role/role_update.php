@@ -11,16 +11,8 @@
   <div class="w-full max-w-3xl bg-white shadow-lg rounded-xl overflow-hidden p-8">
     <h1 class="text-3xl font-bold text-blue-700 text-center mb-6">Update Role</h1>
 
-    <!-- Display Error Message -->
-    <?php if (!empty($errorMessage)) : ?>
-      <div class="flex items-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
-        <span class="material-icons-outlined mr-2">error</span>
-        <span><?= htmlspecialchars($errorMessage) ?></span>
-      </div>
-    <?php endif; ?>
-
     <?php if (isset($role) && !empty($role)) : ?>
-      <form action="index.php?modul=role&fitur=update&id=<?php echo $role['role_id']; ?>" method="POST" class="space-y-6">
+      <form action="index.php?modul=role&fitur=update&id=<?= $role['role_id']; ?>" method="POST" class="space-y-6">
         <!-- Role Name -->
         <div>
           <label for="role_name" class="block text-lg font-medium text-gray-700">Role Name</label>
@@ -39,18 +31,6 @@
           <textarea id="role_description" name="role_description" rows="4"
                     class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                     placeholder="Describe the role" required><?= htmlspecialchars($role['role_description']); ?></textarea>
-        </div>
-
-        <!-- Role Salary -->
-        <div>
-          <label for="role_salary" class="block text-lg font-medium text-gray-700">Salary</label>
-          <div class="relative">
-            <span class="material-icons-outlined absolute left-3 top-2.5 text-gray-400">attach_money</span>
-            <input type="number" id="role_salary" name="role_salary"
-                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                   placeholder="Enter salary"
-                   min="0" value="<?= htmlspecialchars($role['role_salary']); ?>" required>
-          </div>
         </div>
 
         <!-- Role Status -->

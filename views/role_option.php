@@ -22,29 +22,18 @@
       <div class="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full">
         <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Login As</h2>
         <div class="flex flex-col space-y-6">
-          <!-- Admin Role -->
-          <a href="login_admin.php" class="flex items-center justify-between bg-green-600 text-white px-6 py-4 rounded-lg shadow hover:bg-green-700 transition duration-300">
-            <div class="flex items-center space-x-4">
-              <span class="material-icons text-4xl">admin_panel_settings</span>
-              <div>
-                <h3 class="text-xl font-semibold">Admin</h3>
-                <p class="text-sm">Manage the warehouse system</p>
-              </div>
-            </div>
-            <span class="material-icons">arrow_forward</span>
-          </a>
-
-          <!-- Customer Role -->
-          <a href="login_customer.php" class="flex items-center justify-between bg-blue-600 text-white px-6 py-4 rounded-lg shadow hover:bg-blue-700 transition duration-300">
+          <?php foreach ($roles as $role): ?>
+          <a href="<?= $role['link'] ?>" class="flex items-center justify-between bg-<?= $role['color'] ?>-600 text-white px-6 py-4 rounded-lg shadow hover:bg-<?= $role['color'] ?>-700 transition duration-300">
             <div class="flex items-center space-x-4">
               <span class="material-icons text-4xl">person</span>
               <div>
-                <h3 class="text-xl font-semibold">Customer</h3>
-                <p class="text-sm">Track your orders and manage deliveries</p>
+                <h3 class="text-xl font-semibold"><?= $role['title'] ?></h3>
+                <p class="text-sm"><?= $role['description'] ?></p>
               </div>
             </div>
             <span class="material-icons">arrow_forward</span>
           </a>
+          <?php endforeach; ?>
         </div>
       </div>
     </main>

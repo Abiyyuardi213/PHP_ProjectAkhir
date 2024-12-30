@@ -50,8 +50,8 @@ $transactionCount = count($transactions);
 
                 <!-- Info Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                    <!-- Card: Total Roles -->
-                    <?php if ($_SESSION['role_name'] !== 'Admin') { ?>
+                    <!-- Card: Total Roles (Visible only to Admin and Super Admin) -->
+                    <?php if (in_array($_SESSION['role_name'], ['Admin', 'Super Admin'])) { ?>
                     <div class="bg-blue-600 text-white p-6 rounded-none shadow-lg hover:scale-105 transform transition duration-300">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
@@ -68,7 +68,8 @@ $transactionCount = count($transactions);
                     </div>
                     <?php } ?>
 
-                    <!-- Card: Total Users -->
+                    <!-- Card: Total Users (Visible only to Admin and Super Admin) -->
+                    <?php if (in_array($_SESSION['role_name'], ['Admin', 'Super Admin'])) { ?>
                     <div class="bg-green-700 text-white p-6 rounded-none shadow-lg hover:scale-105 transform transition duration-300">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
@@ -83,7 +84,9 @@ $transactionCount = count($transactions);
                             </a>
                         </div>
                     </div>
+                    <?php } ?>
 
+                    <!-- Card: Inventories -->
                     <div class="bg-yellow-500 text-white p-6 rounded-none shadow-lg hover:scale-105 transform transition duration-300">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
@@ -99,6 +102,7 @@ $transactionCount = count($transactions);
                         </div>
                     </div>
 
+                    <!-- Card: Transactions -->
                     <div class="bg-red-600 text-white p-6 rounded-none shadow-lg hover:scale-105 transform transition duration-300">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">

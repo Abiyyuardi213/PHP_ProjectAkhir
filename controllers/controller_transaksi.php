@@ -15,6 +15,8 @@ class ControllerTransaksi {
     }
 
     public function handleRequestTransaksi($fitur) {
+        $user_id = $_SESSION['user_id'] ?? null;
+        
         switch ($fitur) {
             case 'list':
                 $this->listTransaksi();

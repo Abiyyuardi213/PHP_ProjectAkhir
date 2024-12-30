@@ -122,13 +122,9 @@
                                                     View
                                                 </a>
                                             <?php else: ?>
-                                                <img id="profilePicturePreview-<?= htmlspecialchars($user['user_id']) ?>"
-                                                    src="uploads/profile_pictures/default.jpg"
-                                                    alt="Profile Picture"
-                                                    class="w-12 h-12 rounded-full object-cover mx-auto">
-                                                <!-- Link untuk melihat gambar profil, jika belum ada gambar -->
+                                                <!-- Menampilkan gambar profil default jika tidak ada gambar di database -->
                                                 <a href="javascript:void(0)"
-                                                onclick="openModal('uploads/profile_pictures/default.jpg')"
+                                                onclick="openModal('<?= !empty($user['profile_picture']) ? 'uploads/profile_pictures/' . htmlspecialchars($user['profile_picture']) : 'uploads/profile_pictures/default.jpg' ?>')"
                                                 class="inline-flex items-center px-2 py-1 text-sm text-blue-500 bg-blue-100 rounded hover:bg-blue-200 transition">
                                                     <span class="material-icons-outlined mr-1">visibility</span>
                                                     View
