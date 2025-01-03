@@ -96,10 +96,39 @@ class ControllerBarang {
                 $barang_quantity = intval($barang['barang_quantity'] ?? 0);
                 $barang_penerima = htmlspecialchars(trim($barang['barang_penerima'] ?? ''));
                 $invoice_id = htmlspecialchars(trim($barang['invoice_id'] ?? ''));
-    
+                $product_picture = null;
+
+                if (isset($_FILES['product_picture']) && $_FILES['product_picture']['error'] === UPLOAD_ERR_OK) {
+                    $fileTmpPath = $_FILES['product_picture']['tmp_name'];
+                    $fileName = time() . '_' . basename($_FILES['product_picture']['name']);
+                    $uploadDir = './uploads/product_pictures/';
+                    $destPath = $uploadDir . $fileName;
+
+                    if (!file_exists($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+
+                    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+                    $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                    if (in_array($fileExtension, $allowedExtensions)) {
+                        if (move_uploaded_file($fileTmpPath, $destPath)) {
+                            $product_picture = $fileName;
+                        } else {
+                            echo "Failed to upload product picture.";
+                            include './views/inventory/inventory_add.php';
+                            return;
+                        }
+                    } else {
+                        echo "Invalid file type.";
+                        include './views/inventory/inventory_add.php';
+                        return;
+                    }
+                }
+
                 if (empty($barang_name) || $supplier_id <= 0 || $barang_price <= 0 || $barang_quantity <= 0) {
                     echo "Data barang tidak valid. Pastikan semua kolom diisi dengan benar.";
-                    include './views/inventory_add.php';
+                    include './views/inventory/inventory_add.php';
                     return;
                 }
     
@@ -111,7 +140,8 @@ class ControllerBarang {
                     'barang_name' => $barang_name,
                     'barang_price' => $barang_price,
                     'barang_quantity' => $barang_quantity,
-                    'barang_penerima' => $barang_penerima
+                    'barang_penerima' => $barang_penerima,
+                    'product_picture' => $product_picture
                 ];
             }
     
@@ -142,13 +172,42 @@ class ControllerBarang {
             $barang_quantity = intval($_POST['barang_quantity'] ?? 0);
             $barang_penerima = htmlspecialchars(trim($_POST['barang_penerima'] ?? ''));
             $invoice_id = htmlspecialchars(trim($_POST['invoice_id'] ?? ''));
+            $product_picture = $barang['product_picture'];
+
+            if (isset($_FILES['product_picture']) && $_FILES['product_picture']['error'] === UPLOAD_ERR_OK) {
+                $fileTmpPath = $_FILES['product_picture']['tmp_name'];
+                $fileName = time() . '_' . basename($_FILES['product_picture']['name']);
+                $uploadDir = './uploads/product_pictures/';
+                $destPath = $uploadDir . $fileName;
+
+                if (!file_exists($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+
+                $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+                $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                if (in_array($fileExtension, $allowedExtensions)) {
+                    if (move_uploaded_file($fileTmpPath, $destPath)) {
+                        $product_picture = $fileName;
+                    } else {
+                        echo "Failed to upload product picture.";
+                        include './views/inventory/inventory_update.php';
+                        return;
+                    }
+                } else {
+                    echo "Invalid file type.";
+                    include './views/inventory/inventory_update.php';
+                    return;
+                }
+            }
 
             if (empty($barang_name)) {
                 $errorMessage = "Nama barang wajib diisi.";
             } elseif ($supplier_id <= 0) {
                 $errorMessage = "Supplier tidak valid.";
             } else {
-                if ($this->modelBarang->updateBarang($barang_id, $invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima)) {
+                if ($this->modelBarang->updateBarang($barang_id, $invoice_id, $supplier_id, $supplier_phone, $supplier_email, $barang_name, $barang_price, $barang_quantity, $barang_penerima, $product_picture)) {
                     $this->redirectToListWithMessage('Barang berhasil diperbarui.');
                 } else {
                     $errorMessage = "Gagal memperbarui barang.";
@@ -193,6 +252,6 @@ class ControllerBarang {
         } else {
             $barangs = $this->modelBarang->getBarangs();
         }
-        include './views/inventory_list.php';
+        include './views/inventory/inventory_list.php';
     }
 }

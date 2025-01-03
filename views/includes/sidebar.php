@@ -72,7 +72,7 @@
                 </a>
             </li>
             <li class="mb-2">
-                <a href="#" onclick="showLogoutModal()" class="flex items-center py-2 px-4 text-red-400 hover:bg-gray-700">
+                <a href="#" onclick="showLogoutModal()" class="flex items-center py-2 px-4 text-red-300 hover:bg-gray-700">
                     <span class="material-icons-outlined">logout</span>
                     <span class="ml-2">Logout</span>
                 </a>

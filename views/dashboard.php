@@ -3,6 +3,7 @@ include 'models/model_role.php';
 include 'models/model_user.php';
 include 'models/model_barang.php';
 include 'models/model_transaksi.php';
+include 'models/model_supplier.php';
 
 $modelRole = new ModelRole();
 $roles = $modelRole->getRoles();
@@ -19,6 +20,10 @@ $barangCount = count($barangs);
 $modelTransaction = new TransactionModel($conn);
 $transactions = $modelTransaction->getTransactions();
 $transactionCount = count($transactions);
+
+$modelSupplier = new ModelSupplier($conn);
+$suppliers = $modelSupplier->getSuppliers();
+$supplierCount = count($suppliers);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +32,7 @@ $transactionCount = count($transactions);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
@@ -44,6 +50,7 @@ $transactionCount = count($transactions);
                     Dashboard
                 </h1>
             </header>
+
             <!-- Content -->
             <main class="mt-4 px-6 py-4">
                 <h1 class="text-3xl font-semibold mb-6">Your's Management Information</h1>
@@ -51,7 +58,7 @@ $transactionCount = count($transactions);
                 <!-- Info Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     <!-- Card: Total Roles (Visible only to Admin and Super Admin) -->
-                    <?php if (in_array($_SESSION['role_name'], ['Admin', 'Super Admin'])) { ?>
+                    <?php if (in_array($_SESSION['role_name'], ['Super Admin'])) { ?>
                     <div class="bg-blue-600 text-white p-6 rounded-none shadow-lg hover:scale-105 transform transition duration-300">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
@@ -117,30 +124,77 @@ $transactionCount = count($transactions);
                             </a>
                         </div>
                     </div>
+
+                    <!-- Card: Transactions -->
+                    <div class="bg-pink-600 text-white p-6 rounded-none shadow-lg hover:scale-105 transform transition duration-300">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <span class="material-icons-outlined text-4xl">local_shipping</span>
+                                <div class="ml-4">
+                                    <h4 class="text-xl font-bold"><?= $supplierCount; ?></h4>
+                                    <p>Suppliers</p>
+                                </div>
+                            </div>
+                            <a href="index.php?modul=supplier&fitur=list" class="bg-white text-red-500 px-4 py-2 rounded-full font-semibold shadow-md hover:bg-gray-100 transition">
+                                More Info
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+                    <!-- Pie Chart -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h2 class="text-xl font-bold mb-4">User Distribution</h2>
+                        <canvas id="pieChart"></canvas>
+                    </div>
+
+                    <!-- Bar Chart -->
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h2 class="text-xl font-bold mb-4">Monthly Transactions</h2>
+                        <canvas id="barChart"></canvas>
+                    </div>
                 </div>
             </main>
         </div>
     </div>
 
-    <?php if (isset($_SESSION['login_success'])) { ?>
-    <div id="loginSuccessModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-2xl font-bold">Login Berhasil</h2>
-                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
-                    <span class="material-icons-outlined">close</span>
-                </button>
-            </div>
-            <p class="text-gray-700">Selamat datang, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
-            <button onclick="closeModal()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">OK</button>
-        </div>
-    </div>
     <script>
-        function closeModal() {
-            document.getElementById('loginSuccessModal').style.display = 'none';
-            <?php unset($_SESSION['login_success']); ?>
-        }
+        // Data for Pie Chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Admins', 'User', 'Inventory', 'Transaction', 'Supplier'],
+                datasets: [{
+                    data: [<?= $roleCount; ?>, <?= $userCount; ?>, <?= $barangCount; ?>, <?= $transactionCount; ?>, <?= $supplierCount; ?>],
+                    backgroundColor: ['#2563eb', '#16a34a', '#f59e0b', '#dc2626', '#db2777'],
+                }],
+            },
+        });
+
+        // Data for Bar Chart
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                datasets: [{
+                    label: 'Transactions',
+                    data: [12, 19, 3, 5, 2, 3], // Replace with dynamic PHP data if available
+                    backgroundColor: '#FF5722',
+                }],
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        });
     </script>
-    <?php } ?>
 </body>
 </html>

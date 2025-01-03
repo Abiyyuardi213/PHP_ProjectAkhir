@@ -11,35 +11,53 @@
   <!-- Wrapper -->
   <div class="flex flex-col min-h-screen">
     <!-- Header -->
-    <header class="bg-green-700 text-white py-5 shadow-md">
+    <header class="bg-gradient-to-r from-green-700 via-green-800 to-green-900 text-white py-5 shadow-md">
       <div class="container mx-auto px-6 flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Choose Your Role</h1>
+        <div class="flex items-center space-x-3">
+          <span class="material-icons text-3xl">groups</span>
+          <h1 class="text-2xl font-bold">Role Option As</h1>
+        </div>
+        <a href="index.php" class="flex items-center space-x-2 text-white hover:text-gray-200 transition">
+          <span class="material-icons text-xl">home</span>
+          <span class="font-semibold">Home</span>
+        </a>
       </div>
     </header>
 
     <!-- Main Content -->
     <main class="flex-grow flex items-center justify-center py-12">
-      <div class="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full">
-        <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Login As</h2>
+      <div class="bg-white shadow-xl rounded-xl p-10 max-w-lg w-full">
+        <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">Login As</h2>
         <div class="flex flex-col space-y-6">
-          <?php foreach ($roles as $role): ?>
-          <a href="<?= $role['link'] ?>" class="flex items-center justify-between bg-<?= $role['color'] ?>-600 text-white px-6 py-4 rounded-lg shadow hover:bg-<?= $role['color'] ?>-700 transition duration-300">
+          <!-- Admin Button -->
+          <a href="index.php?modul=user&fitur=login" class="group flex items-center justify-between bg-blue-600 text-white px-6 py-5 rounded-lg shadow-lg hover:bg-blue-700 transform hover:-translate-y-1 hover:shadow-xl transition duration-300" onclick="showLoading(this)">
             <div class="flex items-center space-x-4">
-              <span class="material-icons text-4xl">person</span>
+              <span class="material-icons text-4xl group-hover:scale-110 transform transition duration-300">admin_panel_settings</span>
               <div>
-                <h3 class="text-xl font-semibold"><?= $role['title'] ?></h3>
-                <p class="text-sm"><?= $role['description'] ?></p>
+                <h3 class="text-xl font-semibold">Admin</h3>
+                <p class="text-sm text-blue-200">Manage warehouse operations</p>
               </div>
             </div>
             <span class="material-icons">arrow_forward</span>
           </a>
-          <?php endforeach; ?>
+
+          <!-- Customer Button -->
+          <a href="index.php?modul=customer&fitur=login" class="group flex items-center justify-between bg-green-600 text-white px-6 py-5 rounded-lg shadow-lg hover:bg-green-700 transform hover:-translate-y-1 hover:shadow-xl transition duration-300" onclick="showLoading(this)">
+            <div class="flex items-center space-x-4">
+              <span class="material-icons text-4xl group-hover:scale-110 transform transition duration-300">shopping_cart</span>
+              <div>
+                <h3 class="text-xl font-semibold">Customer</h3>
+                <p class="text-sm text-green-200">Place and track orders</p>
+              </div>
+            </div>
+            <span class="material-icons">arrow_forward</span>
+          </a>
         </div>
       </div>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-6">
+    <footer class="bg-gray-900 text-gray-300 py-6">
       <div class="container mx-auto px-6 text-center">
         <p class="text-sm">&copy; 2024 MyWarehouse. All rights reserved.</p>
       </div>
@@ -48,5 +66,28 @@
 
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <script>
+    function showLoading(button) {
+      // Disable the button to prevent multiple clicks
+      button.disabled = true;
+
+      // Change the innerHTML to show a smooth loading animation
+      button.innerHTML = `
+        <div class="flex items-center justify-center">
+          <svg class="animate-spin h-6 w-6 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291l-2.146 2.146c-.63.63-.184 1.707.707 1.707H6a8.1 8.1 0 01-2-.291z"></path>
+          </svg>
+          <span class="text-white text-lg font-semibold">Loading...</span>
+        </div>
+      `;
+
+      // Delay the navigation for a better UX
+      setTimeout(() => {
+        window.location.href = button.getAttribute('href');
+      }, 1500); // Adjust duration here (1500ms = 1.5 seconds)
+    }
+  </script>
 </body>
 </html>

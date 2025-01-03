@@ -31,7 +31,7 @@
                     <span><?= htmlspecialchars($_GET['message']) ?></span>
                     <button onclick="document.getElementById('notification').style.display='none'" class="ml-4 text-white hover:text-gray-200">
                         <span class="material-icons-outlined">close</span>
-                    </but>
+                    </button>
                 </div>
             <?php elseif (isset($_GET['error'])) : ?>
                 <div id="notification" class="fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-4 transform transition duration-500 ease-in-out translate-x-full" style="z-index: 9999;">

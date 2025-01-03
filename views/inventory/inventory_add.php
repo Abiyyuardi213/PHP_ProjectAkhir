@@ -11,7 +11,7 @@
   <div class="w-full max-w-5xl bg-white shadow-lg rounded-xl overflow-hidden p-8">
     <h1 class="text-3xl font-bold text-blue-700 text-center mb-6">Add Multiple Inventories</h1>
 
-    <form action="index.php?modul=inventory&fitur=create" method="POST" class="space-y-6">
+    <form action="index.php?modul=inventory&fitur=create" method="POST" enctype="multipart/form-data" class="space-y-6">
       <div id="barang-container">
         <div class="barang-item border p-4 rounded-lg mb-4 bg-gray-50">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -84,6 +84,13 @@
                   </option>
                 <?php endforeach; ?>
               </select>
+            </div>
+
+            <!-- Product Picture -->
+            <div>
+              <label class="block text-lg font-medium text-gray-700">Product Picture</label>
+              <input type="file" name="product_picture" 
+                     class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
           </div>
         </div>
@@ -173,6 +180,11 @@
                 </option>
               <?php endforeach; ?>
             </select>
+          </div>
+          <div>
+            <label class="block text-lg font-medium text-gray-700">Product Picture</label>
+            <input type="file" name="product_picture" 
+                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
           </div>
         </div>`;
       container.appendChild(newItem);

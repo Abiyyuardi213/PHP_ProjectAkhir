@@ -39,31 +39,52 @@
         <!-- Inventory Information -->
         <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
           <h2 class="text-xl font-semibold text-gray-800 border-b pb-4 mb-4">Inventory Information</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div class="flex items-center">
-              <span class="material-icons-outlined text-blue-700 mr-3">tag</span>
-              <div>
-                <p class="text-sm text-gray-500">Inventory ID</p>
-                <p class="text-lg font-medium text-gray-900"><?= htmlspecialchars($barang['barang_id']) ?></p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Left Column -->
+            <div class="col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div class="flex items-center">
+                <span class="material-icons-outlined text-blue-700 mr-3">tag</span>
+                <div>
+                  <p class="text-sm text-gray-500">Inventory ID</p>
+                  <p class="text-lg font-medium text-gray-900"><?= htmlspecialchars($barang['barang_id']) ?></p>
+                </div>
+              </div>
+
+              <div class="flex items-center">
+                <span class="material-icons-outlined text-blue-700 mr-3">event</span>
+                <div>
+                  <p class="text-sm text-gray-500">Date</p>
+                  <p class="text-lg font-medium text-gray-900">
+                    <?= !empty($barang['created_at']) ? htmlspecialchars(date('d M Y, H:i', strtotime($barang['created_at']))) : 'N/A' ?>
+                  </p>
+                </div>
+              </div> 
+
+              <div class="flex items-center">
+                <span class="material-icons-outlined text-blue-700 mr-3">local_shipping</span>
+                <div>
+                  <p class="text-sm text-gray-500">Supplier</p>
+                  <p class="text-lg font-medium text-gray-900"><?= isset($barang['supplier_name']) ? htmlspecialchars($barang['supplier_name']) : 'Supplier Tidak Diketahui' ?></p>
+                </div>
               </div>
             </div>
 
-            <div class="flex items-center">
-              <span class="material-icons-outlined text-blue-700 mr-3">event</span>
-              <div>
-                <p class="text-sm text-gray-500">Date</p>
-                <p class="text-lg font-medium text-gray-900">
-                  <?= !empty($barang['created_at']) ? htmlspecialchars(date('d M Y, H:i', strtotime($barang['created_at']))) : 'N/A' ?>
-                </p>
-              </div>
-            </div> 
-
-            <div class="flex items-center">
-              <span class="material-icons-outlined text-blue-700 mr-3">local_shipping</span>
-              <div>
-                <p class="text-sm text-gray-500">Supplier</p>
-                <p class="text-lg font-medium text-gray-900"><?= isset($barang['supplier_name']) ? htmlspecialchars($barang['supplier_name']) : 'Supplier Tidak Diketahui' ?></p>
-              </div>
+            <!-- Right Column for Product Picture -->
+            <div class="flex justify-center items-center">
+              <?php if (!empty($barang['product_picture'])) : ?>
+                <div class="relative">
+                  <img src="./uploads/product_pictures/<?= htmlspecialchars($barang['product_picture']) ?>" 
+                      alt="Product Picture" 
+                      class="w-64 h-64 object-cover rounded-lg shadow-md hover:scale-105 transform transition duration-300 ease-in-out">
+                  <div class="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-sm text-center py-2 rounded-b-lg">
+                    <?= htmlspecialchars($barang['barang_name']) ?>
+                  </div>
+                </div>
+              <?php else : ?>
+                <div class="w-64 h-64 flex items-center justify-center bg-gray-200 text-gray-500 rounded-lg shadow-inner">
+                  <span>No Image</span>
+                </div>
+              <?php endif; ?>
             </div>
           </div>
         </div>

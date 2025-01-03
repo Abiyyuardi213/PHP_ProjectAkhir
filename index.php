@@ -1,17 +1,29 @@
 <?php
 session_start();
 
-$modul = $_GET['modul'] ?? 'dashboard';
+$modul = $_GET['modul'] ?? 'home';
 $fitur = $_GET['fitur'] ?? 'list';
 
-if (!isset($_SESSION['user_id']) && !($modul === 'user' && $fitur === 'login')) {
-    header("Location: index.php?modul=user&fitur=login");
-    exit();
-}
-
 switch ($modul) {
+    case 'home':
+        include 'views/role_option.php';
+        break;
+
     case 'dashboard':
         include 'views/dashboard.php';
+        break;
+
+    case 'customer_dashboard':
+        require_once './controllers/controller_pembelian.php';
+        $controllerPembelian = new ControllerPembelian($conn);
+        $controllerPembelian->handleRequestPembelian($fitur);
+        // include 'views/customer/customer_dashboard.php';
+        break;
+
+    case 'client':
+        require_once './controllers/controller_client.php';
+        $controllerClient = new ControllerClient();
+        $controllerClient->handleRequestClient($fitur);
         break;
 
     case 'role':

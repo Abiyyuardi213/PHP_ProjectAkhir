@@ -21,6 +21,29 @@ class CustomerService {
         }
     }
 
+    public function registerCustomer($username, $password, $email, $full_name, $phone_number = null, $address = null) {
+        $sqlCheck = "SELECT * FROM tb_customer WHERE email = ? OR username = ?";
+        $stmtCheck = $this->conn->prepare($sqlCheck);
+        $stmtCheck->bind_param("ss", $email, $username);
+        $stmtCheck->execute();
+        $result = $stmtCheck->get_result();
+        if ($result->num_rows > 0) {
+            return "Email atau Username sudah digunakan";
+        }
+    
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $sql = "INSERT INTO tb_customer (username, password, email, full_name, phone_number, address)
+                VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssssss", $username, $hashedPassword, $email, $full_name, $phone_number, $address);
+    
+        if ($stmt->execute()) {
+            return $this->conn->insert_id;
+        } else {
+            return false;
+        }
+    }
+
     public function getCustomerById($customer_id) {
         $sql = "SELECT * FROM tb_customer WHERE customer_id = ?";
         $stmt = $this->conn->prepare($sql);
@@ -44,7 +67,6 @@ class CustomerService {
     }
 
     public function updateCustomer($customer_id, $username, $email, $full_name, $phone_number, $address) {
-        // Menangani null dengan mengganti dengan string kosong
         $phone_number = $phone_number ?? ''; 
         $address = $address ?? '';
     
@@ -53,7 +75,6 @@ class CustomerService {
                 WHERE customer_id = ?";
         $stmt = $this->conn->prepare($sql);
     
-        // Menyesuaikan tipe data untuk bind_param
         $stmt->bind_param("sssssi", $username, $email, $full_name, $phone_number, $address, $customer_id);
     
         return $stmt->execute();
@@ -66,13 +87,13 @@ class CustomerService {
         return $stmt->execute();
     }
 
-    public function validateLogin($email, $password) {
-        $sql = "SELECT customer_id, password FROM tb_customer WHERE email = ?";
+    public function loginCustomer($username, $password) {
+        $sql = "SELECT customer_id, password FROM tb_customer WHERE username = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("s", $email);
+        $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+
         if ($result->num_rows > 0) {
             $customer = $result->fetch_assoc();
             if (password_verify($password, $customer['password'])) {

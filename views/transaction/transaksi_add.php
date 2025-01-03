@@ -1,11 +1,7 @@
 <?php
-// session_start();
-
-// Pastikan variabel sesi tersedia
 $user_id = $_SESSION['user_id'] ?? null;
 $username = $_SESSION['username'] ?? null;
 
-// Tangani jika sesi tidak ada
 if ($user_id === null || $username === null) {
     echo "User information is missing. Please login again.";
     exit();
