@@ -47,7 +47,6 @@ class ControllerPembelian {
     }
 
     public function viewCart() {
-        // Calculate total price
         $total_price = 0;
         foreach ($_SESSION['cart'] as $item) {
             $total_price += $item['barang_price'] * $item['barang_quantity'];
@@ -68,17 +67,14 @@ class ControllerPembelian {
                         break;
                     }
                 }
-                // Re-index the cart array
                 $_SESSION['cart'] = array_values($_SESSION['cart']);
             }
         }
 
-        // Calculate total price
         $total_price = 0;
         foreach ($_SESSION['cart'] as $item) {
             $total_price += $item['barang_price'] * $item['barang_quantity'];
         }
-
         include './views/customer/customer_cart.php';
     }
 }

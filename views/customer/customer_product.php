@@ -1,5 +1,5 @@
 <?php
-include 'models/model_barang.php';
+require_once 'models/model_barang.php';
 
 function formatRupiah($number) {
     return 'Rp ' . number_format($number, 0, ',', '.');
@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['barang_id'])) {
     $barang_name = $_POST['barang_name'];
     $barang_price = $_POST['barang_price'];
 
-    // Periksa apakah barang sudah ada di keranjang
     $found = false;
     foreach ($_SESSION['cart'] as &$item) {
         if ($item['barang_id'] === $barang_id) {

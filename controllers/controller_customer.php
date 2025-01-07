@@ -57,7 +57,6 @@ class ControllerCustomer {
     public function listCustomers() {
         $customers = $this->model->getAllCustomers();
         include './views/customer/customer_list.php';
-        // include './views/customer/customer_dashboard.php';
     }
 
     public function createCustomer() {

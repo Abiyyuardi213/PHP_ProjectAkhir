@@ -1,10 +1,10 @@
 <?php
-include 'models/model_barang.php';
+// require_once 'models/model_barang.php';
 
-$modelBarang = new ModelBarang($conn);
-$barangs = $modelBarang->getBarangs();
-$barangCount = count($barangs);
-$availableBarangs = $modelBarang->getAvailableBarangs();
+// $modelBarang = new ModelBarang($conn);
+// $barangs = $modelBarang->getBarangs();
+// $barangCount = count($barangs);
+// $availableBarangs = $modelBarang->getAvailableBarangs();
 
 function formatRupiah($number)
 {
@@ -34,10 +34,10 @@ function formatRupiah($number)
         <!-- Navigation -->
         <nav class="flex items-center space-x-6 hidden md:flex">
           <a href="index.php?modul=customer_dashboard&fitur=home" class="hover:underline">Home</a>
-          <a href="#" class="hover:underline">My Orders</a>
+          <a href="index.php?modul=customer_dashboard&fitur=order" class="hover:underline">My Orders</a>
           <a href="index.php?modul=customer_dashboard&fitur=product" class="hover:underline">Products</a>
-          <a href="#" class="hover:underline">Order Status</a>
-          <a href="#" class="hover:underline">Profile</a>
+          <a href="index.php?modul=customer_dashboard&fitur=order_status" class="hover:underline">Order Status</a>
+          <a href="index.php?modul=customer_dashboard&fitur=profile" class="hover:underline">Profile</a>
           <a href="#" class="hover:underline" id="logoutLink">Logout</a>
         </nav>
         <!-- Hamburger Menu for Mobile -->
@@ -50,11 +50,11 @@ function formatRupiah($number)
     <!-- Mobile Menu -->
     <div class="md:hidden" id="mobileMenu" style="display: none;">
       <nav class="flex flex-col space-y-4 py-4 px-6 bg-green-700">
-        <a href="#" class="text-white hover:underline">Home</a>
-        <a href="#" class="text-white hover:underline">My Orders</a>
+        <a href="index.php?modul=customer_dashboard&fitur=home" class="text-white hover:underline">Home</a>
+        <a href="index.php?modul=customer_dashboard&fitur=order" class="text-white hover:underline">My Orders</a>
         <a href="index.php?modul=customer_dashboard&fitur=product" class="text-white hover:underline">Products</a>
-        <a href="#" class="text-white hover:underline">Order Status</a>
-        <a href="#" class="text-white hover:underline">Profile</a>
+        <a href="index.php?modul=customer_dashboard&fitur=order_status" class="text-white hover:underline">Order Status</a>
+        <a href="index.php?modul=customer_dashboard&fitur=profile" class="text-white hover:underline">Profile</a>
         <a href="#" class="text-white hover:underline" id="logoutLinkMobile">Logout</a>
       </nav>
     </div>
@@ -86,7 +86,7 @@ function formatRupiah($number)
         <div class="bg-white rounded-lg shadow-lg p-6 relative hover:shadow-xl">
           <span class="material-icons text-yellow-500 text-5xl absolute top-4 right-4">store</span>
           <h3 class="text-lg font-semibold text-gray-800">Available Products</h3>
-          <p class="text-3xl font-bold mt-4"><?= $barangCount; ?></p>
+          <p class="text-3xl font-bold mt-4"></p>
           <p class="text-sm mt-2 text-gray-600">Browse items in stock</p>
         </div>
 
@@ -105,17 +105,15 @@ function formatRupiah($number)
       <div class="container mx-auto px-6">
         <h2 class="text-3xl font-bold text-gray-800 text-center mb-10">Available Products</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <?php foreach ($availableBarangs as $barang) { ?>
           <!-- Product Card -->
           <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl">
-            <h3 class="text-lg font-semibold text-gray-800 mb-2"><?= htmlspecialchars($barang['barang_name']); ?></h3>
-            <p class="text-gray-600 text-sm mb-4">Quantity: <?= htmlspecialchars($barang['barang_quantity']); ?></p>
-            <p class="text-gray-800 font-medium">Price: <?= formatRupiah($barang['barang_price']); ?></p>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2"></h3>
+            <p class="text-gray-600 text-sm mb-4">Quantity:</p>
+            <p class="text-gray-800 font-medium">Price:</p>
             <button class="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center">
               <span class="material-icons mr-2">shopping_cart</span> Add to Cart
             </button>
           </div>
-          <?php } ?>
         </div>
       </div>
     </section>
