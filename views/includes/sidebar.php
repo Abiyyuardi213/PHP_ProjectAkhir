@@ -23,7 +23,7 @@
                     <span class="ml-2">Dashboard</span>
                 </a>
             </li>
-            <?php if (in_array($_SESSION['role_name'], ['Admin', 'Super Admin'])) { ?>
+            <?php if (in_array($_SESSION['role_name'], ['Super Admin'])) { ?>
             <li class="mb-2">
                 <a href="index.php?modul=role&fitur=list" class="flex items-center py-2 px-4 hover:bg-gray-700">
                     <span class="material-icons-outlined">badge</span>
@@ -51,6 +51,14 @@
                     <span class="ml-2">Transactions</span>
                 </a>
             </li>
+            
+            <li class="mb-2">
+                <a href="index.php?modul=transactions&fitur=create" class="flex items-center py-2 px-4 hover:bg-gray-700">
+                    <span class="material-icons-outlined">add_shopping_cart</span>
+                    <span class="ml-2">Add Transaction</span>
+                </a>
+            </li>
+            
             <li class="mb-2">
                 <a href="index.php?modul=customer&fitur=list" class="flex items-center py-2 px-4 hover:bg-gray-700">
                     <span class="material-icons-outlined">supervisor_account</span>

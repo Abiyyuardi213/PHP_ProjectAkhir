@@ -29,6 +29,31 @@ class TransactionModel {
         return $transactions;
     }
 
+    public function getRecentTransactions($limit = 5) {
+        $sql = "SELECT 
+                    t.transaksi_id, 
+                    t.user_id, 
+                    t.total_amount, 
+                    t.transaksi_date, 
+                    t.transaksi_status,
+                    u.username AS user_name
+                FROM tb_transaction t
+                LEFT JOIN tb_user u ON t.user_id = u.user_id
+                ORDER BY t.transaksi_date DESC
+                LIMIT ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        $recentTransactions = [];
+        while ($row = $result->fetch_assoc()) {
+            $recentTransactions[] = $row;
+        }
+        return $recentTransactions;
+    }
+    
+
     private function getTransactionDetails($transaksi_id) {
         $sql = "SELECT 
                     d.id_barang, 

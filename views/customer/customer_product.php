@@ -5,8 +5,8 @@ function formatRupiah($number) {
     return 'Rp ' . number_format($number, 0, ',', '.');
 }
 
-$modelBarang = new ModelBarang($conn);
-$availableBarangs = $modelBarang->getAvailableBarangs();
+// $modelBarang = new ModelBarang($conn);
+// $availableBarangs = $modelBarang->getAvailableBarangs();
 
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];

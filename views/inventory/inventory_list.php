@@ -58,14 +58,16 @@
             </form>
 
             <!-- Tombol Add Inventory -->
-            <div class="flex justify-between items-center mb-6">
-                <a href="index.php?modul=inventory&fitur=create" 
-                   class="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3 rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition"
-                   aria-label="Add Inventory">
-                    <span class="material-icons-outlined mr-2">add</span>
-                    Add Inventory
-                </a>
-            </div>
+            <?php if (in_array($_SESSION['role_name'], ['Super Admin', 'Admin'])) : ?>
+                <div class="flex justify-between items-center mb-6">
+                    <a href="index.php?modul=inventory&fitur=create" 
+                    class="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3 rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition"
+                    aria-label="Add Inventory">
+                        <span class="material-icons-outlined mr-2">add</span>
+                        Add Inventory
+                    </a>
+                </div>
+            <?php endif; ?>
 
             <!-- Tabel Inventory -->
             <div class="bg-white shadow-md rounded-lg overflow-hidden overflow-x-auto">
@@ -101,17 +103,19 @@
                                             aria-label="Show Details">
                                             <span class="material-icons-outlined mr-1">visibility</span> Details
                                         </a>
-                                        <a href="index.php?modul=inventory&fitur=update&id=<?= htmlspecialchars($barang['barang_id'] ?? '') ?>" 
-                                           class="inline-flex items-center px-2 py-1 text-sm text-yellow-500 bg-yellow-100 rounded hover:bg-yellow-200 transition ml-2"
-                                           aria-label="Edit Inventory">
-                                            <span class="material-icons-outlined mr-1">edit</span>
-                                        </a>
-                                        <a href="index.php?modul=inventory&fitur=delete&id=<?= htmlspecialchars($barang['barang_id'] ?? '') ?>" 
-                                           class="inline-flex items-center px-2 py-1 text-sm text-red-500 bg-red-100 rounded hover:bg-red-200 transition ml-2"
-                                           onclick="return confirm('Are you sure you want to delete this inventory?')"
-                                           aria-label="Delete Inventory">
-                                            <span class="material-icons-outlined mr-1">delete</span>
-                                        </a>
+                                        <?php if (in_array($_SESSION['role_name'], ['Super Admin', 'Admin'])) : ?>
+                                            <a href="index.php?modul=inventory&fitur=update&id=<?= htmlspecialchars($barang['barang_id'] ?? '') ?>" 
+                                            class="inline-flex items-center px-2 py-1 text-sm text-yellow-500 bg-yellow-100 rounded hover:bg-yellow-200 transition ml-2"
+                                            aria-label="Edit Inventory">
+                                                <span class="material-icons-outlined mr-1">edit</span>
+                                            </a>
+                                            <a href="index.php?modul=inventory&fitur=delete&id=<?= htmlspecialchars($barang['barang_id'] ?? '') ?>" 
+                                            class="inline-flex items-center px-2 py-1 text-sm text-red-500 bg-red-100 rounded hover:bg-red-200 transition ml-2"
+                                            onclick="return confirm('Are you sure you want to delete this inventory?')"
+                                            aria-label="Delete Inventory">
+                                                <span class="material-icons-outlined mr-1">delete</span>
+                                            </a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

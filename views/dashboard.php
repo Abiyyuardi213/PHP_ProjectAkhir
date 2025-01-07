@@ -16,10 +16,12 @@ $userCount = count($users);
 $modelBarang = new ModelBarang($conn);
 $barangs = $modelBarang->getBarangs();
 $barangCount = count($barangs);
+$availableBarangs = $modelBarang->getAvailableBarangs();
 
 $modelTransaction = new TransactionModel($conn);
 $transactions = $modelTransaction->getTransactions();
 $transactionCount = count($transactions);
+$recentTransactions = $modelTransaction->getRecentTransactions();
 
 $modelSupplier = new ModelSupplier($conn);
 $suppliers = $modelSupplier->getSuppliers();
@@ -155,6 +157,35 @@ $supplierCount = count($suppliers);
                         <h2 class="text-xl font-bold mb-4">Monthly Transactions</h2>
                         <canvas id="barChart"></canvas>
                     </div>
+                </div>
+
+                <!-- Recent Transactions Table -->
+                <div class="bg-white p-6 rounded-lg shadow-lg mt-8">
+                    <h2 class="text-xl font-bold mb-4">Recent Transactions</h2>
+                    <table class="table-auto w-full border-collapse border border-gray-300">
+                        <thead class="bg-gray-200">
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2">Transaction ID</th>
+                                <th class="border border-gray-300 px-4 py-2">Date</th>
+                                <th class="border border-gray-300 px-4 py-2">User</th>
+                                <th class="border border-gray-300 px-4 py-2">Total Amount</th>
+                                <th class="border border-gray-300 px-4 py-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($recentTransactions as $transaction) { ?>
+                            <tr>
+                                <td class="border border-gray-300 text-center px-4 py-2"><?= $transaction['transaksi_id']; ?></td>
+                                <td class="border border-gray-300 text-center px-4 py-2"><?= $transaction['transaksi_date']; ?></td>
+                                <td class="border border-gray-300 text-center px-4 py-2"><?= $transaction['user_name']; ?></td>
+                                <td class="border border-gray-300 text-center px-4 py-2">Rp<?= number_format($transaction['total_amount'], 2); ?></td>
+                                <td class="border border-gray-300 text-center px-4 py-2">
+                                    <?= $transaction['transaksi_status'] == 1 ? 'Success' : 'Pending'; ?>
+                                </td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
             </main>
         </div>
