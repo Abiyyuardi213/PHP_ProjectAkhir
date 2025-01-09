@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventory List</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 </head>
 <body class="bg-gray-100">
   <div class="flex h-screen">
@@ -43,31 +45,90 @@
                 </div>
             <?php endif; ?>
 
-            <!-- Form Pencarian -->
-            <form action="index.php" method="get" class="flex items-center bg-white shadow-lg rounded-full overflow-hidden mb-6 w-full max-w-lg mx-auto">
+            <!-- Form Filter -->
+            <form action="index.php?modul=inventory&fitur=filter" method="post" class="space-y-6 bg-white shadow-lg rounded-lg p-6 mb-6 w-full max-w-4xl mx-auto">
                 <input type="hidden" name="modul" value="inventory">
                 <input type="hidden" name="fitur" value="list">
-                <div class="flex items-center px-4">
-                    <span class="material-icons-outlined text-gray-400">search</span>
-                </div>
-                <input type="text" name="search" placeholder="Search inventory..." value="<?= htmlspecialchars($searchTerm ?? '') ?>"
-                    class="flex-grow py-2 px-4 border-0 focus:ring-0 focus:outline-none text-gray-700 placeholder-gray-400">
-                <button type="submit" class="bg-blue-500 px-4 py-2 text-white rounded-full hover:bg-blue-600 transition duration-300 ease-in-out">
-                    Search
-                </button>
-            </form>
 
-            <!-- Tombol Add Inventory -->
-            <?php if (in_array($_SESSION['role_name'], ['Super Admin', 'Admin'])) : ?>
-                <div class="flex justify-between items-center mb-6">
-                    <a href="index.php?modul=inventory&fitur=create" 
-                    class="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-3 rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition"
-                    aria-label="Add Inventory">
-                        <span class="material-icons-outlined mr-2">add</span>
-                        Add Inventory
-                    </a>
+                <!-- Name Filter -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <div class="flex flex-col">
+                        <label for="barang_name" class="text-sm text-gray-600 mb-2">Name</label>
+                        <input type="text" name="barang_name" id="barang_name" placeholder="Barang Name" value="<?= htmlspecialchars($filters['barang_name'] ?? '') ?>" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300">
+                    </div>
+
+                    <!-- Min Price Filter -->
+                    <div class="flex flex-col">
+                        <label for="min_price" class="text-sm text-gray-600 mb-2">Min Price</label>
+                        <input type="number" name="min_price" id="min_price" placeholder="Min Price" value="<?= htmlspecialchars($filters['min_price'] ?? '') ?>" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300">
+                    </div>
+
+                    <!-- Max Price Filter -->
+                    <div class="flex flex-col">
+                        <label for="max_price" class="text-sm text-gray-600 mb-2">Max Price</label>
+                        <input type="number" name="max_price" id="max_price" placeholder="Max Price" value="<?= htmlspecialchars($filters['max_price'] ?? '') ?>" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300">
+                    </div>
                 </div>
-            <?php endif; ?>
+
+                <!-- Quantity Filter and Supplier -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <!-- Min Quantity Filter -->
+                    <div class="flex flex-col">
+                        <label for="min_quantity" class="text-sm text-gray-600 mb-2">Min Quantity</label>
+                        <input type="number" name="min_quantity" id="min_quantity" placeholder="Min Quantity" value="<?= htmlspecialchars($filters['min_quantity'] ?? '') ?>" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300">
+                    </div>
+
+                    <!-- Supplier Filter -->
+                    <div class="flex flex-col">
+                        <label for="supplier_id" class="text-sm text-gray-600 mb-2">Supplier</label>
+                        <select name="supplier_id" id="supplier_id" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300 select2">
+                            <option value="">Select Supplier</option>
+                            <?php foreach ($suppliers as $supplier) : ?>
+                                <option value="<?= htmlspecialchars($supplier['supplier_id']) ?>" <?= (isset($filters['supplier_id']) && $filters['supplier_id'] == $supplier['supplier_id']) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($supplier['supplier_name']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <!-- Start Date Filter -->
+                    <div class="flex flex-col">
+                        <label for="start_date" class="text-sm text-gray-600 mb-2">Start Date</label>
+                        <input type="date" name="start_date" id="start_date" value="<?= htmlspecialchars($filters['start_date'] ?? '') ?>" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300">
+                    </div>
+                </div>
+
+                <!-- End Date Filter -->
+                <div class="flex flex-col sm:flex-row sm:items-center gap-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center">
+                        <label for="end_date" class="text-sm text-gray-600 mb-2 sm:mb-0">End Date</label>
+                        <input type="date" name="end_date" id="end_date" value="<?= htmlspecialchars($filters['end_date'] ?? '') ?>" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300">
+                    </div>
+
+                    <!-- Apply Filter Button -->
+                    <div class="flex justify-start sm:justify-center">
+                        <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
+                            Apply Filter
+                        </button>
+                    </div>
+
+                    <!-- Add Inventory Button -->
+                    <div class="flex justify-start sm:justify-center">
+                        <a href="index.php?modul=inventory&fitur=create" 
+                        class="flex items-center bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition duration-300">
+                            <span class="material-icons-outlined mr-2">add</span> Add Inventory
+                        </a>
+                    </div>
+
+                    <!-- Export PDF Button -->
+                    <div class="flex justify-start sm:justify-center">
+                        <a href="index.php?modul=inventory&fitur=export_pdf" 
+                        class="flex items-center bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 transition duration-300">
+                            <span class="material-icons-outlined mr-2">picture_as_pdf</span> Export to PDF
+                        </a>
+                    </div>
+                </div>
+            </form>
 
             <!-- Tabel Inventory -->
             <div class="bg-white shadow-md rounded-lg overflow-hidden overflow-x-auto">
@@ -133,6 +194,10 @@
     </div>
   </div>
   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.select2').select2();
+    });
+
     setTimeout(() => {
         const notification = document.getElementById('notification');
         if (notification) {
@@ -143,9 +208,6 @@
 
     setTimeout(() => {
       const notification = document.getElementById('notification');
-      if (notification) {
-        notification.style.display = 'none';
-      }
     }, 3000);
   </script>
 </body>

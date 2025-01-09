@@ -57,6 +57,10 @@ class ControllerBarang {
                 $this->sortInventory('id', $order);
                 break;
 
+            case 'filter':
+                $this->filterBarang();
+                break;
+
             default:
                 $this->listBarangs();
                 break;
@@ -64,6 +68,7 @@ class ControllerBarang {
     }
 
     public function listBarangs() {
+        $suppliers = $this->modelSupplier->getAllSuppliers();
         $searchTerm = $_GET['search'] ?? null;
         if ($searchTerm) {
             $barangs = $this->modelBarang->searchBarangByName($searchTerm);
@@ -252,6 +257,29 @@ class ControllerBarang {
         } else {
             $barangs = $this->modelBarang->getBarangs();
         }
+        include './views/inventory/inventory_list.php';
+    }
+
+    public function filterBarang() {
+        $filters = [
+            'barang_name' => isset($_POST['barang_name']) ? $_POST['barang_name'] : '',
+            'min_price' => isset($_POST['min_price']) ? $_POST['min_price'] : '',
+            'max_price' => isset($_POST['max_price']) ? $_POST['max_price'] : '',
+            'min_quantity' => isset($_POST['min_quantity']) ? $_POST['min_quantity'] : '',
+            'supplier_id' => isset($_POST['supplier_id']) ? $_POST['supplier_id'] : '',
+            'start_date' => isset($_POST['start_date']) ? $_POST['start_date'] : '',
+            'end_date' => isset($_POST['end_date']) ? $_POST['end_date'] : '',
+        ];
+    
+        // Validasi filter jika diperlukan
+        if (!empty($filters['min_price']) && !is_numeric($filters['min_price'])) {
+            // Handle invalid price input
+        }
+    
+        // Validasi lainnya sesuai kebutuhan
+    
+        $barangs = $this->modelBarang->filterBarangs($filters);
+        
         include './views/inventory/inventory_list.php';
     }
 }

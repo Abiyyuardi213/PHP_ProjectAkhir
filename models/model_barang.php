@@ -208,4 +208,94 @@ class ModelBarang {
         $result = $this->conn->query($query);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
+    public function filterBarangs($filters) {
+        $conditions = [];
+        $params = [];
+        $types = "";
+    
+        if (!empty($filters['barang_name'])) {
+            $conditions[] = "i.barang_name LIKE ?";
+            $params[] = "%" . $filters['barang_name'] . "%";
+            $types .= "s";
+        }
+    
+        if (!empty($filters['min_price'])) {
+            $conditions[] = "i.barang_price >= ?";
+            $params[] = $filters['min_price'];
+            $types .= "d";
+        }
+    
+        if (!empty($filters['max_price'])) {
+            $conditions[] = "i.barang_price <= ?";
+            $params[] = $filters['max_price'];
+            $types .= "d";
+        }
+    
+        if (!empty($filters['min_quantity'])) {
+            $conditions[] = "i.barang_quantity >= ?";
+            $params[] = $filters['min_quantity'];
+            $types .= "i";
+        }
+    
+        if (!empty($filters['supplier_id'])) {
+            $conditions[] = "i.supplier_id = ?";
+            $params[] = $filters['supplier_id'];
+            $types .= "i";
+        }
+    
+        if (!empty($filters['start_date'])) {
+            // Validasi format tanggal
+            $startDate = DateTime::createFromFormat('Y-m-d', $filters['start_date']);
+            if ($startDate) {
+                $conditions[] = "DATE(i.created_at) >= ?";
+                $params[] = $filters['start_date'];
+                $types .= "s";
+            }
+        }
+    
+        if (!empty($filters['end_date'])) {
+            // Validasi format tanggal
+            $endDate = DateTime::createFromFormat('Y-m-d', $filters['end_date']);
+            if ($endDate) {
+                $conditions[] = "DATE(i.created_at) <= ?";
+                $params[] = $filters['end_date'];
+                $types .= "s";
+            }
+        }
+    
+        // Jika tidak ada filter, query bisa dilakukan tanpa WHERE
+        $sql = "SELECT 
+                    i.barang_id,
+                    i.barang_name,
+                    i.barang_price,
+                    i.barang_quantity,
+                    s.supplier_name,
+                    i.created_at
+                FROM tb_inventory i
+                LEFT JOIN tb_supplier s ON i.supplier_id = s.supplier_id";
+    
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $conditions);
+        }
+    
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            throw new Exception("Error preparing statement: " . $this->conn->error);
+        }
+    
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+    
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        $barangs = [];
+        while ($row = $result->fetch_assoc()) {
+            $barangs[] = $row;
+        }
+    
+        return $barangs;
+    }
 }
