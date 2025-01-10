@@ -12,6 +12,8 @@ class ModelBarang {
         $sql = "SELECT 
                     i.barang_id,
                     i.barang_name,
+                    i.barang_price,
+                    i.barang_quantity,
                     s.supplier_name,
                     i.product_picture,
                     i.created_at
@@ -264,7 +266,6 @@ class ModelBarang {
             }
         }
     
-        // Jika tidak ada filter, query bisa dilakukan tanpa WHERE
         $sql = "SELECT 
                     i.barang_id,
                     i.barang_name,

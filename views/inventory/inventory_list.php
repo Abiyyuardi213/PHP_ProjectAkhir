@@ -122,7 +122,7 @@
 
                     <!-- Export PDF Button -->
                     <div class="flex justify-start sm:justify-center">
-                        <a href="index.php?modul=inventory&fitur=export_pdf" 
+                        <a href="index.php?modul=inventory&fitur=exportPDF" 
                         class="flex items-center bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 transition duration-300">
                             <span class="material-icons-outlined mr-2">picture_as_pdf</span> Export to PDF
                         </a>
