@@ -17,7 +17,6 @@ switch ($modul) {
         require_once './controllers/controller_pembelian.php';
         $controllerPembelian = new ControllerPembelian($conn);
         $controllerPembelian->handleRequestPembelian($fitur);
-        // include 'views/customer/customer_dashboard.php';
         break;
 
     case 'client':

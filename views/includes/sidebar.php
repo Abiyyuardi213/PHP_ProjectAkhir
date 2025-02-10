@@ -74,7 +74,7 @@
             </li>
             <?php } ?>
             <li class="mb-2">
-                <a href="#" class="flex items-center py-2 px-4 hover:bg-gray-700">
+                <a href="index.php?modul=user&fitur=profile" class="flex items-center py-2 px-4 hover:bg-gray-700">
                     <span class="material-icons-outlined">person</span>
                     <span class="ml-2">Profile</span>
                 </a>

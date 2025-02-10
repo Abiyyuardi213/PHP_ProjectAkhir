@@ -12,7 +12,7 @@ $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Your Name');
 $pdf->SetTitle('Rekap Inventory Barang');
 $pdf->SetSubject('Inventory Report');
-$pdf->SetKeywords('TCPDF, PDF, inventory');
+$pdf->SetKeywords('TCPDF, PDF, inventory');     
 
 $pdf->AddPage();
 

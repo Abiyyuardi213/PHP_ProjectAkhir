@@ -53,6 +53,9 @@ class ControllerUser {
             case 'logout':
                 $this->logoutUser();
                 break;
+            case 'profile':
+                include './views/user/user_profile.php';
+                break;
             default:
                 $this->listUsers();
                 break;

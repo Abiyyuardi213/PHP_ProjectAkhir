@@ -43,14 +43,16 @@ $supplierCount = count($suppliers);
         <?php include 'includes/sidebar.php'; ?>
 
         <!-- Main Content -->
-        <div class="ml-64 flex flex-col flex-grow">
-
+        <div class="flex flex-col flex-grow transition-all duration-300 ml-0 md:ml-64">
             <!-- Header -->
-            <header class="bg-blue-700 text-white py-4 px-6 shadow-md">
+            <header class="bg-blue-700 text-white py-4 px-6 shadow-md flex justify-between items-center">
                 <h1 class="text-2xl font-bold flex items-center">
                     <span class="material-icons-outlined mr-2">dashboard</span>
                     Dashboard
                 </h1>
+                <button id="sidebarToggle" class="md:hidden bg-blue-600 text-white p-2 rounded-full shadow-lg">
+                    <span class="material-icons">menu</span>
+                </button>
             </header>
 
             <!-- Content -->
@@ -225,6 +227,11 @@ $supplierCount = count($suppliers);
                     },
                 },
             },
+        });
+
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
         });
     </script>
 </body>

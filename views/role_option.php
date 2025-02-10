@@ -12,12 +12,12 @@
   <div class="flex flex-col min-h-screen">
     <!-- Header -->
     <header class="bg-gradient-to-r from-green-700 via-green-800 to-green-900 text-white py-5 shadow-md">
-      <div class="container mx-auto px-6 flex justify-between items-center">
+      <div class="container mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center">
         <div class="flex items-center space-x-3">
           <span class="material-icons text-3xl">groups</span>
-          <h1 class="text-2xl font-bold">Role Option As</h1>
+          <h1 class="text-xl md:text-2xl font-bold">Role Option As</h1>
         </div>
-        <a href="index.php" class="flex items-center space-x-2 text-white hover:text-gray-200 transition">
+        <a href="index.php" class="flex items-center space-x-2 text-white hover:text-gray-200 transition mt-4 md:mt-0">
           <span class="material-icons text-xl">home</span>
           <span class="font-semibold">Home</span>
         </a>
@@ -25,41 +25,29 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow flex items-center justify-center py-12">
-      <div class="bg-white shadow-xl rounded-xl p-10 max-w-lg w-full">
-        <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">Login As</h2>
-        <div class="flex flex-col space-y-6">
+    <main class="flex-grow flex items-center justify-center py-8 px-4 md:px-6">
+      <div class="bg-white shadow-xl rounded-xl p-6 md:p-10 w-full max-w-md">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-800 text-center mb-6">Login As</h2>
+        <div class="flex flex-col space-y-4">
           <!-- Admin Button -->
-          <a href="index.php?modul=user&fitur=login" class="group flex items-center justify-between bg-blue-600 text-white px-6 py-5 rounded-lg shadow-lg hover:bg-blue-700 transform hover:-translate-y-1 hover:shadow-xl transition duration-300" onclick="showLoading(this)">
+          <a href="index.php?modul=user&fitur=login" class="group flex flex-col sm:flex-row items-center justify-between bg-blue-600 text-white px-6 py-5 rounded-lg shadow-lg hover:bg-blue-700 transform hover:-translate-y-1 hover:shadow-xl transition duration-300" onclick="showLoading(this)">
             <div class="flex items-center space-x-4">
               <span class="material-icons text-4xl group-hover:scale-110 transform transition duration-300">admin_panel_settings</span>
               <div>
-                <h3 class="text-xl font-semibold">Admin</h3>
+                <h3 class="text-lg md:text-xl font-semibold">Admin</h3>
                 <p class="text-sm text-blue-200">Manage warehouse operations</p>
               </div>
             </div>
-            <span class="material-icons">arrow_forward</span>
-          </a>
-
-          <!-- Customer Button -->
-          <a href="index.php?modul=customer&fitur=login" class="group flex items-center justify-between bg-green-600 text-white px-6 py-5 rounded-lg shadow-lg hover:bg-green-700 transform hover:-translate-y-1 hover:shadow-xl transition duration-300" onclick="showLoading(this)">
-            <div class="flex items-center space-x-4">
-              <span class="material-icons text-4xl group-hover:scale-110 transform transition duration-300">shopping_cart</span>
-              <div>
-                <h3 class="text-xl font-semibold">Customer</h3>
-                <p class="text-sm text-green-200">Place and track orders</p>
-              </div>
-            </div>
-            <span class="material-icons">arrow_forward</span>
+            <span class="material-icons hidden sm:block">arrow_forward</span>
           </a>
         </div>
       </div>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 py-6">
-      <div class="container mx-auto px-6 text-center">
-        <p class="text-sm">&copy; 2024 MyWarehouse. All rights reserved.</p>
+    <footer class="bg-gray-900 text-gray-300 py-4">
+      <div class="container mx-auto px-4 text-center">
+        <p class="text-xs md:text-sm">&copy; 2024 MyWarehouse. All rights reserved.</p>
       </div>
     </footer>
   </div>

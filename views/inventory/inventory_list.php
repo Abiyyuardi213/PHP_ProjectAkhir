@@ -91,29 +91,38 @@
                         </select>
                     </div>
 
-                    <!-- Start Date Filter -->
-                    <div class="flex flex-col">
-                        <label for="start_date" class="text-sm text-gray-600 mb-2">Start Date</label>
-                        <input type="date" name="start_date" id="start_date" value="<?= htmlspecialchars($filters['start_date'] ?? '') ?>" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300">
+                    <!-- Start Date and End Date Filter -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        <div class="flex flex-col">
+                            <label for="start_date" class="text-sm text-gray-600 mb-2">Start Date</label>
+                            <input type="date" name="start_date" id="start_date" value="<?= htmlspecialchars($filters['start_date'] ?? '') ?>" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="end_date" class="text-sm text-gray-600 mb-2">End Date</label>
+                            <input type="date" name="end_date" id="end_date" value="<?= htmlspecialchars($filters['end_date'] ?? '') ?>" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300">
+                        </div>
                     </div>
                 </div>
 
                 <!-- End Date Filter -->
-                <div class="flex flex-col sm:flex-row sm:items-center gap-6">
-                    <div class="flex flex-col sm:flex-row sm:items-center">
-                        <label for="end_date" class="text-sm text-gray-600 mb-2 sm:mb-0">End Date</label>
-                        <input type="date" name="end_date" id="end_date" value="<?= htmlspecialchars($filters['end_date'] ?? '') ?>" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300">
-                    </div>
-
+                <div class="flex flex-col sm:flex-row sm:items-center gap-6 justify-center">
                     <!-- Apply Filter Button -->
-                    <div class="flex justify-start sm:justify-center">
+                    <div class="flex justify-center">
                         <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
                             Apply Filter
                         </button>
                     </div>
 
+                    <!-- Reset Filter Button -->
+                    <div class="flex justify-center">
+                        <a href="index.php?modul=inventory&fitur=list" 
+                        class="flex items-center bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition duration-300">
+                            <span class="material-icons-outlined mr-2">refresh</span> Reset Filter
+                        </a>
+                    </div>
+
                     <!-- Add Inventory Button -->
-                    <div class="flex justify-start sm:justify-center">
+                    <div class="flex justify-center">
                         <a href="index.php?modul=inventory&fitur=create" 
                         class="flex items-center bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition duration-300">
                             <span class="material-icons-outlined mr-2">add</span> Add Inventory
@@ -121,7 +130,7 @@
                     </div>
 
                     <!-- Export PDF Button -->
-                    <div class="flex justify-start sm:justify-center">
+                    <div class="flex justify-center">
                         <a href="index.php?modul=inventory&fitur=exportPDF" 
                         class="flex items-center bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 transition duration-300">
                             <span class="material-icons-outlined mr-2">picture_as_pdf</span> Export to PDF

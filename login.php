@@ -31,7 +31,7 @@ $logoutSuccess = isset($_SESSION['logout_success']);
         </div>
     </header>
     <!-- Main Content -->
-    <div class="flex-grow flex items-center justify-center">
+    <div class="flex-grow flex items-center justify-center px-4 sm:px-0">
         <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
             <h2 class="text-3xl font-bold text-center text-indigo-600 mb-6">
                 <span class="inline-block mr-2">
@@ -75,7 +75,7 @@ $logoutSuccess = isset($_SESSION['logout_success']);
 
     <!-- Logout Modal -->
     <?php if ($logoutSuccess) { ?>
-        <div id="logoutSuccessModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div id="logoutSuccessModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 px-4 sm:px-0">
             <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-2xl font-bold">Logout Berhasil</h2>
